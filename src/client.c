@@ -1,4 +1,4 @@
-// gcc -o client cleint.c
+// gcc -o client client.c
 //./server 1000
 
 #include <stdio.h>
@@ -24,10 +24,6 @@ int main(int argc, char **argv)
         fprintf(stderr, "Failed to create socket\n");
         exit(1);
     }
-    
-
-
-    
 	bzero(&serverAddr, sizeof(serverAddr));
 	inet_pton(AF_INET, serverName, &serverAddr.sin_addr);
 	serverAddr.sin_family = AF_INET;
