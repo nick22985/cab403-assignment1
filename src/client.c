@@ -67,12 +67,12 @@ int main(int argc, char **argv)
 	while(1)
 	{
 		bzero(buf, MAXDATASIZE);
-		fgets(buf, MAXDATASIZE, stdin);
+		fgets(buf, MAXDATASIZE-1, stdin);
 		n = write(sockfd,buf,strlen(buf));
         if (n < 0) 
              perror("ERROR writing to socket");
-        bzero(buf,256);
-        n = read(sockfd,buf,255);
+        bzero(buf,MAXDATASIZE);
+        n = read(sockfd,buf,MAXDATASIZE-1);
         if (n < 0) 
              perror("ERROR reading from socket");
         printf("Server : %s\n",buf);
