@@ -32,7 +32,6 @@
  * 																*
  ****************************************************************/
 
-<<<<<<< HEAD
 	#define ARRAY_SIZE 1  /* Size of array to receive */
 	#define RETURNED_ERROR -1
 
@@ -52,28 +51,6 @@
 	}
 	return results;
 }
-
-int main(int argc, char *argv[]) {
-=======
-// Thoughts ////////////////////////////////////////////////////////////
-// struct client_info {
-// 	int sock_fd;
-// 	bool connected;
-// 	int client_Number;
-// };
-
-// typedef struct client_info Client_Info_t;
-// int connection_Number = 0;
-
-
-/****************************************************************
- * 																*
- * 						Functions Declaration					*
- * 																*
- ****************************************************************/
-// void* handle_c(void *client_Info);
-// void* get_client_number (Client_Info_t *client);
->>>>>>> 16d92fadb5cf10838a7ad08d800fac9fef73cfde
 
 // void send_response(int socket_fd, req_t response){
 //     if (send(socket_fd, &response, sizeof(req_t), PF_UNSPEC) == ERROR){

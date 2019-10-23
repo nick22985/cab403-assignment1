@@ -90,21 +90,22 @@ int sockfd, numbytes;
 	// }
 
 	/* Create an array of squares of first 20 whole numbers */
-	char simpleArray[ARRAY_SIZE] ;
-	for (int i = 0; i < ARRAY_SIZE; i++) {
-		simpleArray[i] = "Test Message";
-	}
+	char *simpleArray[ARRAY_SIZE] ;
+	// for (int i = 0; i < ARRAY_SIZE; i++) {
+	// 	simpleArray[i] = "Test Message";
+	// }
 
-	printf("%c \n",simpleArray[0]);
-	printf("%c \n",simpleArray[1]);
-	printf("%c \n",simpleArray[2]);
-	printf("%c \n",simpleArray[3]);
-	printf("%c \n",simpleArray[4]);
-	printf("%c \n",simpleArray[5]);
-	printf("%c \n",simpleArray[6]);
-	printf("%c \n",simpleArray[7]);
-	printf("%c \n",simpleArray[8]);
-	printf("%c \n",simpleArray[9]);
+	simpleArray[0] = "Test Message";
+	printf("%s \n",simpleArray[0]);
+	// printf("%c \n",simpleArray[1]);
+	// printf("%c \n",simpleArray[2]);
+	// printf("%c \n",simpleArray[3]);
+	// printf("%c \n",simpleArray[4]);
+	// printf("%c \n",simpleArray[5]);
+	// printf("%c \n",simpleArray[6]);
+	// printf("%c \n",simpleArray[7]);
+	// printf("%c \n",simpleArray[8]);
+	// printf("%c \n",simpleArray[9]);
 
 	Send_Array_Data(sockfd, simpleArray);
 
