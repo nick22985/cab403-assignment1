@@ -11,8 +11,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
-#define MAXDATASIZE 100
-#define BUFFER_SIZE 32
+	#define MYPORT 54321    /* the port users will be connecting to */
 
 int main(int argc, char **argv)
 {
@@ -51,35 +50,65 @@ int main(int argc, char **argv)
 	struct hostent *he;
 	struct sockaddr_in their_addr; /* connector's address information */
 
-	if (argc != 3) {
-		fprintf(stderr,"usage: client_hostname port_number\n");
-		exit(1);
-	}
+	#define BACKLOG 10     /* how many pending connections queue will hold */
+	
+	#define PORT 54321    /* the port client will be connecting to */
 
-	if ((he=gethostbyname(argv[1])) == NULL) {  /* get the host info */
-		herror("gethostbyname");
-		exit(1);
-	}
+	#define MAXDATASIZE 100 /* max number of bytes we can get at once */
 
+int main(int argc, char *argv[]) {
+	int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
+	struct sockaddr_in my_addr;    /* my address information */
+	struct sockaddr_in their_addr; /* connector's address information */
+	socklen_t sin_size;
+
+	/* generate the socket */
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		perror("socket");
 		exit(1);
 	}
 
+	/* generate the end point */
+	my_addr.sin_family = AF_INET;         /* host byte order */
+	my_addr.sin_port = htons(MYPORT);     /* short, network byte order */
+	my_addr.sin_addr.s_addr = INADDR_ANY; /* auto-fill with my IP */
+		/* bzero(&(my_addr.sin_zero), 8);   ZJL*/     /* zero the rest of the struct */
 
-	their_addr.sin_family = AF_INET;      /* host byte order */
-	their_addr.sin_port = htons(atoi(argv[2]));    /* short, network byte order */
-	their_addr.sin_addr = *((struct in_addr *)he->h_addr);
-	bzero(&(their_addr.sin_zero), 8);     /* zero the rest of the struct */
+	/* bind the socket to the end point */
+	if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) \
+	== -1) {
+		perror("bind");
+		exit(1);
+	}
 
-	if (connect(sockfd, (struct sockaddr *)&their_addr, \
-	sizeof(struct sockaddr)) == -1) {
-		perror("connect");
+	/* start listnening */
+	if (listen(sockfd, BACKLOG) == -1) {
+		perror("listen");
 		exit(1);
 	}
 	
 
-	close(sockfd);
+	printf("server starts listnening ...\n");
 
-	return 0;
+	/* repeat: accept, send, close the connection */
+	/* for every accepted connection, use a sepetate process or thread to serve it */
+	while(1) {  /* main accept() loop */
+		sin_size = sizeof(struct sockaddr_in);
+		if ((new_fd = accept(sockfd, (struct sockaddr *)&their_addr, \
+		&sin_size)) == -1) {
+			perror("accept");
+			continue;
+		}
+		printf("server: got connection from %s\n", \
+			inet_ntoa(their_addr.sin_addr));
+		if (!fork()) { /* this is the child process */
+			if (send(new_fd, "Hello, world!\n", 14, 0) == -1)
+				perror("send");
+			close(new_fd);
+			exit(0);
+		}
+		close(new_fd);  /* parent doesn't need this */
+
+		while(waitpid(-1,NULL,WNOHANG) > 0); /* clean up child processes */
+	}
 }
