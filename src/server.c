@@ -16,10 +16,13 @@
 	#define BACKLOG 10     /* how many pending connections queue will hold */
 
 int main(int argc, char *argv[]) {
-int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
+
+    int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
 	struct sockaddr_in my_addr;    /* my address information */
+
 	struct sockaddr_in their_addr; /* connector's address information */
 	socklen_t sin_size;
+    int *client_number = 0;
 
 	/* generate the socket */
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -59,8 +62,11 @@ int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
 		}
 		printf("server: got connection from %s\n", \
 			inet_ntoa(their_addr.sin_addr));
+        client_number += 1;
+        printf("%ls \n", client_number);
+        char *temp = "test";
 		if (!fork()) { /* this is the child process */
-			if (send(new_fd, "Hello, world!\n", 14, 0) == -1)
+			if (send(new_fd, temp, 100, 0) == -1)
 				perror("send");
 			close(new_fd);
 			exit(0);
