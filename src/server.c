@@ -10,7 +10,7 @@
 #include <sys/wait.h> 
 #include <unistd.h>
 #include <errno.h>
-
+#include <pthread.h?>
 
 	#define ARRAY_SIZE 30  /* Size of array to receive */
 
@@ -18,6 +18,10 @@
 
 	#define RETURNED_ERROR -1
 
+
+	#define PORT 54321    /* the port client will be connecting to */
+
+	#define MAXDATASIZE 100 /* max number of bytes we can get at once */
 
 void Send_Array_Data(int socket_id) {
 
