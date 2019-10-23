@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -16,15 +15,9 @@
 	#define PORT 54321    /* the port users will be connecting to */
 	#define MAXDATASIZE 100 /* max number of bytes we can get at once */
 
-//void Send(int socket_id, )
-
-
-
-
-
 int main(int argc, char **argv)
 {
-	int sockfd, numbytes, n;  
+int sockfd, numbytes;  
 	char buf[MAXDATASIZE];
 	struct hostent *he;
 	struct sockaddr_in their_addr; /* connector's address information */
@@ -64,22 +57,6 @@ int main(int argc, char **argv)
 
 	printf("Received: %s",buf);
 
-	while(1)
-	{
-		bzero(buf, MAXDATASIZE);
-		fgets(buf, MAXDATASIZE-1, stdin);
-		n = write(sockfd,buf,strlen(buf));
-        if (n < 0) 
-             perror("ERROR writing to socket");
-        bzero(buf,MAXDATASIZE);
-        n = read(sockfd,buf,MAXDATASIZE-1);
-        if (n < 0) 
-             perror("ERROR reading from socket");
-        printf("Server : %s\n",buf);
-        int i = strncmp("Bye" , buf , 3);
-        if(i == 0)
-               break;
-	}
 	close(sockfd);
 
 	return 0;
