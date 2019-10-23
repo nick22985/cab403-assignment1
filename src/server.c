@@ -63,10 +63,10 @@ int main(int argc, char *argv[]) {
 		printf("server: got connection from %s\n", \
 			inet_ntoa(their_addr.sin_addr));
         client_number += 1;
-        printf("%d \n", client_number);
+        printf("Client number %d connected\n", client_number);
         // char *temp = "test";
 		if (!fork()) { /* this is the child process */
-			if (send(new_fd, "test", 100, 0) == -1)
+			if (send(new_fd, "You're connected!\n", 100, 0) == -1)
 				perror("send");
 			close(new_fd);
 			exit(0);
