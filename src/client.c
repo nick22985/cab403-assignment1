@@ -1,4 +1,4 @@
-// gcc -o client cleint.c
+// gcc -o client client.c
 //./server 1000
 
 #include <stdio.h>
@@ -11,12 +11,22 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
-#define MAXDATASIZE 100
-#define BUFFER_SIZE 32
+	#define MAXDATASIZE 100 /* max number of bytes we can get at once */
 
-int main(int argc, char **argv)
-{
-    int sockfd, numbytes, i=0;  
+	#define ARRAY_SIZE 30
+
+
+void Send_Array_Data(int socket_id, int *myArray) {
+	int i=0;
+	uint16_t statistics;  
+	for (i = 0; i < ARRAY_SIZE; i++) {
+		statistics = htons(myArray[i]);
+		send(socket_id, &statistics, sizeof(uint16_t), 0);
+	}
+}
+
+int main(int argc, char *argv[]) {
+	int sockfd, numbytes, i=0;  
 	char buf[MAXDATASIZE];
 	struct hostent *he;
 	struct sockaddr_in their_addr; /* connector's address information */
@@ -47,6 +57,26 @@ int main(int argc, char **argv)
 		perror("connect");
 		exit(1);
 	}
+
+	/* Create an array of squares of first 30 whole numbers */
+	int simpleArray[ARRAY_SIZE] = {0};
+	for (i = 0; i < ARRAY_SIZE; i++) {
+		simpleArray[i] = i * i;
+	}
+
+	Send_Array_Data(sockfd, simpleArray);
+
+	/* Receive message back from server */
+	if ((numbytes=recv(sockfd, buf, MAXDATASIZE, 0)) == -1) {
+		perror("recv");
+		exit(1);
+	}
+
+	buf[numbytes] = '\0';
+
+	buf[numbytes] = '\0';
+
+	printf("Received: %s",buf);
 
 	close(sockfd);
 
