@@ -15,6 +15,26 @@
 	#define MYPORT 54321    /* the port users will be connecting to */
 	#define BACKLOG 10     /* how many pending connections queue will hold */
 
+	#define ARRAY_SIZE 1  /* Size of array to receive */
+	#define RETURNED_ERROR -1
+
+	int *Receive_Array_Int_Data(int socket_identifier, int size) {
+    int number_of_bytes, i=0;
+    uint16_t statistics;
+	
+	int *results = malloc(sizeof(int)*size);
+	for (i=0; i < size; i++) {
+		if ((number_of_bytes=recv(socket_identifier, &statistics, sizeof(uint16_t), 0))
+		         == RETURNED_ERROR) {
+			perror("recv");
+			exit(EXIT_FAILURE);			
+		    
+		}
+		results[i] = ntohs(statistics);
+	}
+	return results;
+}
+
 int main(int argc, char *argv[]) {
 
     int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
@@ -68,6 +88,21 @@ int main(int argc, char *argv[]) {
 		if (!fork()) { /* this is the child process */
 			if (send(new_fd, "You're connected!\n", 100, 0) == -1)
 				perror("send");
+
+						/* Call method to recieve array data */
+			int *results = Receive_Array_Int_Data(new_fd,  ARRAY_SIZE);	
+
+			/* Print out the array results sent by client */
+			for (int i=0; i < ARRAY_SIZE; i++) {
+				printf("Value of index[%d] = %c\n", i, results[i]);
+			}			
+
+			free(results);
+
+			if (send(new_fd, "All of array data received by server\n", 40 , 0) == -1)
+				perror("send");
+			close(new_fd);
+			exit(0);
 			close(new_fd);
 			exit(0);
 		}

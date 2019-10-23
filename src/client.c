@@ -14,6 +14,29 @@
 
 	#define PORT 54321    /* the port users will be connecting to */
 	#define MAXDATASIZE 100 /* max number of bytes we can get at once */
+	#define BUFFERSIZE  1000  //Size of memory buffer. I have no idea how big this should be.//
+
+	#define ARRAY_SIZE 1  //taken from wk7 array sending solution//
+
+	void SetUpBuffer(){
+		char *ClientSideStorage = calloc(BUFFERSIZE, sizeof(char));
+	}
+
+
+	void AnotherBufferSetup(){
+		char* ClientBuffer;
+		ClientBuffer = (char*)malloc(BUFFERSIZE);
+	}
+
+
+void Send_Array_Data(int socket_id, char *myArray) {
+	int i=0;
+	uint16_t statistics;  
+	for (i = 0; i < ARRAY_SIZE; i++) {
+		statistics = htons(myArray[i]);
+		send(socket_id, &statistics, sizeof(uint16_t), 0);
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -57,7 +80,40 @@ int sockfd, numbytes;
 
 	printf("Received: %s",buf);
 
+
+	// while(1){   //While connected - breaking while loop ends client connection
+	// void TestMessageSending (){
+	// 	char message[60];
+	// 	scanf( "%s", message );
+	// 	send(int sockfd, )
+	// }
+	// }
+
+	/* Create an array of squares of first 20 whole numbers */
+	char simpleArray[ARRAY_SIZE] ;
+	for (int i = 0; i < ARRAY_SIZE; i++) {
+		simpleArray[i] = "Test Message";
+	}
+
+	printf("%c \n",simpleArray[0]);
+	printf("%c \n",simpleArray[1]);
+	printf("%c \n",simpleArray[2]);
+	printf("%c \n",simpleArray[3]);
+	printf("%c \n",simpleArray[4]);
+	printf("%c \n",simpleArray[5]);
+	printf("%c \n",simpleArray[6]);
+	printf("%c \n",simpleArray[7]);
+	printf("%c \n",simpleArray[8]);
+	printf("%c \n",simpleArray[9]);
+
+	Send_Array_Data(sockfd, simpleArray);
+
+
+
+
+
 	close(sockfd);
+
 
 	return 0;
 }
