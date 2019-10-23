@@ -1,7 +1,15 @@
+/****************************************************************
+ * 																*
+ * 								Libraries						*
+ * 																*
+ ****************************************************************/
+
 #include "../include/server.h"
 #include <arpa/inet.h>
 #include <stdio.h> 
 #include <stdlib.h> 
+#include <signal.h>         /*SIGINT*/
+#include <stdbool.h>
 #include <errno.h> 
 #include <string.h> 
 #include <sys/types.h> 
@@ -10,11 +18,21 @@
 #include <sys/wait.h> 
 #include <unistd.h>
 #include <errno.h>
+#include <termios.h> 		// Stop Terminal Echo
+#include <pthread.h>
+#include <netinet/in.h> 
+#include <netdb.h>
 
+#define MYPORT 54321    /* the port users will be connecting to */
+#define BACKLOG 10     /* how many pending connections queue will hold */
 
-	#define MYPORT 54321    /* the port users will be connecting to */
-	#define BACKLOG 10     /* how many pending connections queue will hold */
+/****************************************************************
+ * 																*
+ * 						Initial Values					*
+ * 																*
+ ****************************************************************/
 
+<<<<<<< HEAD
 	#define ARRAY_SIZE 1  /* Size of array to receive */
 	#define RETURNED_ERROR -1
 
@@ -36,10 +54,38 @@
 }
 
 int main(int argc, char *argv[]) {
+=======
+// Thoughts ////////////////////////////////////////////////////////////
+// struct client_info {
+// 	int sock_fd;
+// 	bool connected;
+// 	int client_Number;
+// };
 
+// typedef struct client_info Client_Info_t;
+// int connection_Number = 0;
+
+
+/****************************************************************
+ * 																*
+ * 						Functions Declaration					*
+ * 																*
+ ****************************************************************/
+// void* handle_c(void *client_Info);
+// void* get_client_number (Client_Info_t *client);
+>>>>>>> 16d92fadb5cf10838a7ad08d800fac9fef73cfde
+
+// void send_response(int socket_fd, req_t response){
+//     if (send(socket_fd, &response, sizeof(req_t), PF_UNSPEC) == ERROR){
+//         perror("Sending request response");
+//     }
+// }
+
+///////////////////////////////////////////////////////////////////
+
+int main(int argc, char *argv[]) {
     int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
 	struct sockaddr_in my_addr;    /* my address information */
-
 	struct sockaddr_in their_addr; /* connector's address information */
 	socklen_t sin_size;
     int client_number = 0;
@@ -110,5 +156,7 @@ int main(int argc, char *argv[]) {
 
 		while(waitpid(-1,NULL,WNOHANG) > 0); /* clean up child processes */
     }
-
 }
+
+
+

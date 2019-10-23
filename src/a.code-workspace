@@ -7,5 +7,9 @@
 			"path": "E:\\Program Files\\OneDrive - Queensland University of Technology\\QUT-Lesson-Resources\\Year-2\\Year-2-Sem-2\\Cab403\\CAB403 Assignment"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"pthread.h": "c"
+		}
+	}
 }
