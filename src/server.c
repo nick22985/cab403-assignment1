@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 
 	struct sockaddr_in their_addr; /* connector's address information */
 	socklen_t sin_size;
-    int *client_number = 0;
+    int client_number = 0;
 
 	/* generate the socket */
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -63,10 +63,10 @@ int main(int argc, char *argv[]) {
 		printf("server: got connection from %s\n", \
 			inet_ntoa(their_addr.sin_addr));
         client_number += 1;
-        printf("%ls \n", client_number);
-        char *temp = "test";
+        printf("%d \n", client_number);
+        // char *temp = "test";
 		if (!fork()) { /* this is the child process */
-			if (send(new_fd, temp, 100, 0) == -1)
+			if (send(new_fd, "test", 100, 0) == -1)
 				perror("send");
 			close(new_fd);
 			exit(0);
