@@ -1,11 +1,22 @@
 #include "../include/server.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <errno.h> 
+#include <string.h> 
+#include <sys/types.h> 
+#include <netinet/in.h> 
+#include <sys/socket.h> 
+#include <sys/wait.h> 
 #include <unistd.h>
-#include <netinet/in.h>
+#include <errno.h>
+
+
+#define ARRAY_SIZE 30  /* Size of array to receive */
+
+#define BACKLOG 10     /* how many pending connections queue will hold */
+
+#define RETURNED_ERROR -1
 
 // gcc -o server server.c
 //./server 1000
@@ -14,49 +25,52 @@
 
 int main(int argc, char **argv)
 {
-    struct sockaddr_in serverAddr;
-    char buffer[BUFFER_SIZE];
+/* Thread and thread attributes */
+	pthread_t client_thread;
+	pthread_attr_t attr;
 
-    int listenFd = socket(AF_INET, SOCK_STREAM, 0);
-    if (listenFd == -1) {
-        fprintf(stderr, "Failed to create listen socket\n");
-        exit(1);
-    }
-    bzero(&serverAddr, sizeof(serverAddr));
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serverAddr.sin_port = htons(1301);
-    if (bind(listenFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) == -1) {
-        fprintf(stderr, "Failed to bind socket\n");
-        close(listenFd);
-        exit(1);
-    }
-    if (listen(listenFd, 5) == -1) {
-        fprintf(stderr, "Failed to listen on socket\n");
-        close(listenFd);
-        exit(1);
-    }
-    for (;;) {
-        int connectFd = accept(listenFd, NULL, NULL);
-        if (connectFd == -1) {
-            fprintf(stderr, "Failed to accept connection\n");
-            close(listenFd);
-            exit(1);
-        }
 
-        read(connectFd, buffer, BUFFER_SIZE);
-        printf("Received \"%s\" from client!\n", buffer);
-        sprintf(buffer, "Hello world (from server)");
-        write(connectFd, buffer, BUFFER_SIZE);
+	int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
+	struct sockaddr_in my_addr;    /* my address information */
+	struct sockaddr_in their_addr; /* connector's address information */
+	socklen_t sin_size;
+	int i=0;
 
-        if (shutdown(connectFd, SHUT_RDWR) == -1) {
-            fprintf(stderr, "Failed to shutdown socket\n");
-            close(listenFd);
-            close(connectFd);
-            exit(1);
-        }
-        close(connectFd);
-    }
+	/* Get port number for server to listen on */
+	if (argc != 2) {
+		fprintf(stderr,"usage: client port_number\n");
+		exit(1);
+	}
+
+	/* generate the socket */
+	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+		perror("socket");
+		exit(1);
+	}
+
+	/* generate the end point */
+	my_addr.sin_family = AF_INET;         /* host byte order */
+	my_addr.sin_port = htons(atoi(argv[1]));     /* short, network byte order */
+	my_addr.sin_addr.s_addr = INADDR_ANY; /* auto-fill with my IP */
+		/* bzero(&(my_addr.sin_zero), 8);   ZJL*/     /* zero the rest of the struct */
+
+	/* bind the socket to the end point */
+	if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) \
+	== -1) {
+		perror("bind");
+		exit(1);
+	}
+
+	/* start listnening */
+	if (listen(sockfd, BACKLOG) == -1) {
+		perror("listen");
+		exit(1);
+	}
+
+	printf("server starts listnening ...\n");
+
+
+	close(new_fd);  
     
 }
 
