@@ -10,7 +10,7 @@
 #include <sys/wait.h> 
 #include <unistd.h>
 #include <errno.h>
-#include <pthread.h?>
+
 
 	#define MYPORT 54321    /* the port users will be connecting to */
 	#define BACKLOG 10     /* how many pending connections queue will hold */
@@ -69,3 +69,5 @@ int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
 
 		while(waitpid(-1,NULL,WNOHANG) > 0); /* clean up child processes */
     }
+
+}
