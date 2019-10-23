@@ -15,15 +15,10 @@
 
 
 	#define BACKLOG 10     /* how many pending connections queue will hold */
+	
+	#define PORT 54321    /* the port client will be connecting to */
 
-void Send_Array_Data(int socket_id, int *myArray) {
-	int i=0;
-	uint16_t statistics;  
-	for (i = 0; i < ARRAY_SIZE; i++) {
-		statistics = htons(myArray[i]);
-		send(socket_id, &statistics, sizeof(uint16_t), 0);
-	}
-}
+	#define MAXDATASIZE 100 /* max number of bytes we can get at once */
 
 int main(int argc, char *argv[]) {
 	int sockfd, new_fd;  /* listen on sock_fd, new connection on new_fd */
