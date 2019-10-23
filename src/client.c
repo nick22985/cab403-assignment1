@@ -47,6 +47,7 @@ int main(int argc, char **argv)
 		perror("connect");
 		exit(1);
 	}
+	
 
 	close(sockfd);
 
