@@ -19,11 +19,22 @@ void error(const char *msg){
 }
 
 
+int SelectPort(int EnteredPort) {
+	int PortUsed;
+	if(EnteredPort != NULL){
+		PortUsed = EnteredPort;
+	}
+	else{
+		PortUsed = DEFAULTPORT;
+	}
+	return PortUsed;
+}
+
 int main(int argc, char *argv[]){
 
-    int PortUsed = DEFAULTPORT;
-
     char server_message[256] = "You have reached the server. Yes cunt.";
+
+	int EnteredPort = atoi(argv[0]);
 
 //create server socket
     int server_socket;
@@ -32,24 +43,25 @@ int main(int argc, char *argv[]){
     //address structure
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(PortUsed);
+    server_address.sin_port = htons(SelectPort(EnteredPort));
     server_address.sin_addr.s_addr = INADDR_ANY;
 
     //bind the socket to specified IP and port
     bind (server_socket, (struct sockaddr*) &server_address, sizeof(server_address));
 
-    //listen for connections
-    listen(server_socket, 10);
 
-    
-    int client_socket;
-    client_socket = accept(server_socket, NULL, NULL);
+	while(1){
+		//listen for connections
+		listen(server_socket, 10);
+    	int client_socket;
+    	client_socket = accept(server_socket, NULL, NULL);
 
 
-    //send message
-    send(client_socket, server_message, sizeof(server_message),0);
-
-    //close socket
+    	//send message
+    	send(client_socket, server_message, sizeof(server_message),0);
+	}
+	
+	//close socket
     close(server_socket);
 
     return 0;
