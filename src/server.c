@@ -31,7 +31,6 @@
 #include <netdb.h>
 
 
-
 #define DEFAULTPORT 12345
 
 
@@ -52,23 +51,16 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-void PrintRecievedText(){
-
-
-
-}
 
 int main(int argc, char *argv[]){
-	//CreateBuffer();
+
 
     char server_message[256] = "You have reached the server. Yes cunt.";
-	char buffer[255];
+
+	//Int to refer to Buffer by
 	int n;
 
 	int EnteredPort = atoi(argv[0]);
-    int s,r;
-	int n;
-    char output[]="client: Enter data for server: ";
 
 //create server socket
     int server_socket;
@@ -82,6 +74,7 @@ int main(int argc, char *argv[]){
 
     //bind the socket to specified IP and port
     bind (server_socket, (struct sockaddr*) &server_address, sizeof(server_address));
+
 	while(1){
 		//listen for connections
 		listen(server_socket, 10);
@@ -97,8 +90,6 @@ int main(int argc, char *argv[]){
     	//send message
     	send(client_socket, server_message, sizeof(server_message),0);
 		
-
-
 	}
 	
 	//close socket

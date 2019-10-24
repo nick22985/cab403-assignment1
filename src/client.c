@@ -13,6 +13,8 @@
 
 #define DEFAULTPORT 12345
 
+
+//Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
 	send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
 	printf("sent !\n");
@@ -37,11 +39,13 @@ if (connection_status != 0){
     printf("CONNECTION ERROR");
 }
 
-//recieve data from server
-char server_response[256];
 
+//Send testing message
 SendMessage(network_socket, "TESTINGTESTING");
 
+
+//recieve data from server
+char server_response[256];
 recv(network_socket, &server_response, sizeof(server_response),0);
 
 //print the server response
