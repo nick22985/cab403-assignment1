@@ -53,16 +53,18 @@ int SelectPort(int EnteredPort) {
 
 
 int main(int argc, char *argv[]){
-
-
     char server_message[256] = "You have reached the server. Yes cunt.";
 
 	//Int to refer to Buffer by
 	int n;
-
 	int EnteredPort = atoi(argv[0]);
 
-//create server socket
+
+
+    struct sockaddr_storage serverStorage;
+    socklen_t addr_size;
+
+    //create server socket
     int server_socket;
     server_socket = socket(AF_INET, SOCK_STREAM,0);
     char buffer[256];
@@ -79,14 +81,16 @@ int main(int argc, char *argv[]){
 		//listen for connections
 		listen(server_socket, 10);
     	int client_socket;
-    	client_socket = accept(server_socket, NULL, NULL);
-		
+        addr_size = sizeof serverStorage;
+    	client_socket = accept(server_socket, (struct sockaddr *) &serverStorage, &addr_size);
 
 		bzero(buffer,256);
         n = read(client_socket,buffer,256);
         printf("Client: %s\n",buffer);
-        if ( buffer == "TEST") {
+        printf("%d\n", strcmp("next", buffer));
+        if ( strcmp("next", buffer) == 0) {
              printf("Test Function Here\n");
+             //Function for server to run when next is run.
         }
         else {
             printf("DID NOT HIT \n",buffer);

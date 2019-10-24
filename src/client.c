@@ -41,7 +41,7 @@ if (connection_status != 0){
 
 
 //Send testing message
-SendMessage(network_socket, "TESTINGTESTING");
+SendMessage(network_socket, "next");
 
 
 //recieve data from server
