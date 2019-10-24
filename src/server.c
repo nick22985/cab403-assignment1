@@ -83,8 +83,15 @@ int main(int argc, char *argv[]){
 		
 
 		bzero(buffer,256);
-        n = read(client_socket,buffer,255);
+        n = read(client_socket,buffer,256);
         printf("Client: %s\n",buffer);
+        if ( buffer == "TEST") {
+             printf("Test Function Here\n");
+        }
+        else {
+            printf("DID NOT HIT \n",buffer);
+        }
+        
 
 		
     	//send message
