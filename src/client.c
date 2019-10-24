@@ -13,6 +13,13 @@
 
 #define DEFAULTPORT 12345
 
+void SendMessage(int DestinationSocket ,char *EnteredText){
+	send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
+	printf("sent !\n");
+}
+
+char client_response[256];
+
 int main(int argc, char *argv[]) {
 //create socket
 int network_socket;
@@ -34,9 +41,17 @@ if (connection_status != 0){
 char server_response[256];
 recv(network_socket, &server_response, sizeof(server_response),0);
 
+SendMessage(network_socket, "TESTINGTESTING");
+
 
 //print the server response
 printf("The server said %s\n", server_response);
+
+while(1){
+	//CODE WHILE CONNECTED GOeS HERE
+
+
+}
 
 //close connection
 close(network_socket);

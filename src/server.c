@@ -34,6 +34,7 @@
 
 #define DEFAULTPORT 12345
 
+
 void error(const char *msg){
     perror(msg);
     exit(1);
@@ -51,7 +52,14 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
+void PrintRecievedText(){
+
+
+
+}
+
 int main(int argc, char *argv[]){
+	CreateBuffer();
 
     char server_message[256] = "You have reached the server. Yes cunt.";
 
