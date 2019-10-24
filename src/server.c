@@ -59,16 +59,16 @@ void PrintRecievedText(){
 }
 
 int main(int argc, char *argv[]){
-	CreateBuffer();
-
     char server_message[256] = "You have reached the server. Yes cunt.";
 
 	int EnteredPort = atoi(argv[0]);
+    int s,r;
+    char output[]="client: Enter data for server: ";
 
 //create server socket
     int server_socket;
     server_socket = socket(AF_INET, SOCK_STREAM,0);
-
+    char buffer[256];
     //address structure
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
@@ -82,12 +82,16 @@ int main(int argc, char *argv[]){
 		listen(server_socket, 10);
     	int client_socket;
     	client_socket = accept(server_socket, NULL, NULL);
-		if (client_socket == "a") {
-			printf("NOT NULL");
-		}
-		else {
-			printf("NULL");
-		}
+
+        while(strcmp(buffer,"halt")!=0 && strcmp(buffer,"quit")!=0){
+            bzero(buffer,256);
+            write(1,output,strlen(output));
+            r=read(0,buffer,sizeof(buffer));
+            buffer[r-1]='\0';
+            write(s,buffer,strlen(buffer));
+            read(s, buffer, sizeof(buffer));
+            printf("Answer from server: %s\n",buffer);
+        }
 
 		
     	//send message

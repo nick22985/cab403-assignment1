@@ -10,7 +10,8 @@
 	"settings": {
 		"files.associations": {
 			"pthread.h": "c",
-			"server.h": "c"
+			"server.h": "c",
+			"errno.h": "c"
 		}
 	}
 }
