@@ -83,7 +83,7 @@ int main(int argc, char *argv[]){
     	int client_socket;
     	client_socket = accept(server_socket, NULL, NULL);
 
-        while(strcmp(buffer,"halt")!=0 && strcmp(buffer,"quit")!=0){
+
             bzero(buffer,256);
             write(1,output,strlen(output));
             r=read(0,buffer,sizeof(buffer));
@@ -91,8 +91,6 @@ int main(int argc, char *argv[]){
             write(s,buffer,strlen(buffer));
             read(s, buffer, sizeof(buffer));
             printf("Answer from server: %s\n",buffer);
-        }
-
 		
     	//send message
     	send(client_socket, server_message, sizeof(server_message),0);
