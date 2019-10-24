@@ -10,7 +10,12 @@
 	"settings": {
 		"files.associations": {
 			"pthread.h": "c",
+<<<<<<< HEAD
 			"server.h": "c"
+=======
+			"server.h": "c",
+			"errno.h": "c"
+>>>>>>> 9714352f615b24218543c644d00baaa2109599b3
 		}
 	}
 }

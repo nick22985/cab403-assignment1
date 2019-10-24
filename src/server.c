@@ -66,11 +66,14 @@ int main(int argc, char *argv[]){
 	int n;
 
 	int EnteredPort = atoi(argv[0]);
+    int s,r;
+	int n;
+    char output[]="client: Enter data for server: ";
 
 //create server socket
     int server_socket;
     server_socket = socket(AF_INET, SOCK_STREAM,0);
-
+    char buffer[256];
     //address structure
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
@@ -90,6 +93,7 @@ int main(int argc, char *argv[]){
         n = read(client_socket,buffer,255);
         printf("Client: %s\n",buffer);
 
+		
     	//send message
     	send(client_socket, server_message, sizeof(server_message),0);
 		
