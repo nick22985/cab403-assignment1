@@ -63,6 +63,7 @@ int main(int argc, char *argv[]){
 
 	int EnteredPort = atoi(argv[0]);
     int s,r;
+	int n;
     char output[]="client: Enter data for server: ";
 
 //create server socket
@@ -82,15 +83,26 @@ int main(int argc, char *argv[]){
 		listen(server_socket, 10);
     	int client_socket;
     	client_socket = accept(server_socket, NULL, NULL);
+        
+        n = read(client_socket,buffer,255);
+		if (n < 0) error("ERROR reading from socket");
+        printf("Client: %s\n",buffer);
 
 
-            bzero(buffer,256);
-            write(1,output,strlen(output));
-            r=read(0,buffer,sizeof(buffer));
-            buffer[r-1]='\0';
-            write(s,buffer,strlen(buffer));
-            read(s, buffer, sizeof(buffer));
-            printf("Answer from server: %s\n",buffer);
+
+        bzero(buffer,256);
+        write(1,output,strlen(output));
+        r=read(0,buffer,sizeof(buffer));
+        buffer[r-1]='\0';
+        if (buffer == "sub") {
+            
+        }
+
+
+
+        // write(s,buffer,strlen(buffer));
+        // read(s, buffer, sizeof(buffer));
+        // printf("Answer from server: %s\n",buffer);
 		
     	//send message
     	send(client_socket, server_message, sizeof(server_message),0);
