@@ -9,7 +9,8 @@
 	],
 	"settings": {
 		"files.associations": {
-			"pthread.h": "c"
+			"pthread.h": "c",
+			"server.h": "c"
 		}
 	}
 }

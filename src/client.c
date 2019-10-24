@@ -39,10 +39,10 @@ if (connection_status != 0){
 
 //recieve data from server
 char server_response[256];
-recv(network_socket, &server_response, sizeof(server_response),0);
 
 SendMessage(network_socket, "TESTINGTESTING");
 
+recv(network_socket, &server_response, sizeof(server_response),0);
 
 //print the server response
 printf("The server said %s\n", server_response);
