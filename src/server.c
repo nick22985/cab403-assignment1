@@ -32,13 +32,19 @@
 
 
 #define DEFAULTPORT 12345
-
+#define server_buff 256
 
 void error(const char *msg){
     perror(msg);
     exit(1);
 }
 
+void SendMessage(int DestinationSocket ,char *EnteredText){
+	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
+	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
+	printf("sent !\n");
+	printf("Test: %ld\n",strlen(EnteredText));
+}
 
 int SelectPort(int EnteredPort) {
 	int PortUsed;
@@ -77,7 +83,6 @@ int main(int argc, char *argv[]){
     //bind the socket to specified IP and port
     bind (server_socket, (struct sockaddr*) &server_address, sizeof(server_address));
 
-
 	while(1){
 		//listen for connections
 		listen(server_socket, 10);
@@ -88,7 +93,7 @@ int main(int argc, char *argv[]){
         //send message
         send(client_socket, server_message, sizeof(server_message),0);
         while(1){
-            bzero(buffer,256);
+            bzero(buffer,256);  
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
@@ -131,10 +136,11 @@ int main(int argc, char *argv[]){
                 //     //Function for server to run when next is run.
 
                 // }
-                else {
-                    printf("DID NOT HIT \n",buffer);
-                    printf("length of buffer is: %ld\n", strlen(buffer)); 
-                }
+                    else {
+                        printf("DID NOT HIT \n",buffer);
+                        printf("length of buffer is: %ld\n", strlen(buffer)); 
+                        SendMessage(server_socket, buffer);
+                    }
             }
         }
 		
