@@ -3,32 +3,17 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
-
 #include <string.h>
-#include <strings.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netdb.h>
-
 #include "../include/server.h"
-#include <arpa/inet.h>
-#include <stdio.h> 
-#include <stdlib.h> 
 #include <signal.h>         /*SIGINT*/
 #include <stdbool.h>
-#include <errno.h> 
-#include <string.h> 
-#include <sys/types.h> 
-#include <netinet/in.h> 
-#include <sys/socket.h> 
-#include <sys/wait.h> 
-#include <unistd.h>
-#include <errno.h>
 #include <termios.h> 		// Stop Terminal Echo
 #include <pthread.h>
-#include <netinet/in.h> 
-#include <netdb.h>
+
 
 
 #define DEFAULTPORT 12345
