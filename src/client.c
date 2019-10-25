@@ -66,6 +66,7 @@ void func(int sockfd)
         else {
             //send message to server
             SendMessage(sockfd, clientBuffer);
+			bzero(clientBuffer,256);
 			break;
         }       
         break;
@@ -101,6 +102,7 @@ int main(int argc, char *argv[]) {
 
 	//Send testing message
 	SendMessage(network_socket, "next CHANNELID");
+	bzero(buffer,256);
 
 	//recieve data from server
 	char server_response[256];

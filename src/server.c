@@ -125,6 +125,7 @@ int main(int argc, char *argv[]){
                         printf("DID NOT HIT %s\n",buffer);
                         printf("length of buffer is: %ld\n", strlen(buffer)); 
                         SendMessage(client_socket, buffer);
+                        bzero(buffer,256);
                     }
             }
         }
