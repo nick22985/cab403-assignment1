@@ -24,7 +24,7 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
 	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
 	printf("sent !\n");
-	printf("Test: %ld\n",strlen(EnteredText));
+	printf("TestClient: %ld\n",strlen(EnteredText));
 }
 
 void ifstatment(char buffer) {
@@ -40,7 +40,7 @@ void func(int sockfd)
         bzero(buff, sizeof(buff)); 
 		bzero(clientBuffer, sizeof(buff));
 		//start accept user input
-        printf("Enter the string : "); 
+        printf("\nEnter the string : "); 
         n = 0; 
 		//client input untill an 'enter' is input
         while ((buff[n++] = getchar()) != '\n');
@@ -49,6 +49,8 @@ void func(int sockfd)
 			clientBuffer[u] = buff[u];
 		}
         printf("-----> %s \n", clientBuffer);
+
+
 		//next channel
         if (strcmp("next", clientBuffer) == 0) {
             printf("PROCESS NEXT CHANNEL \n");
@@ -64,8 +66,9 @@ void func(int sockfd)
         else {
             //send message to server
             SendMessage(sockfd, clientBuffer);
+			break;
         }       
-        
+        break;
     } 
 } 
 

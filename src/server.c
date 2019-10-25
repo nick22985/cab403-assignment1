@@ -28,7 +28,7 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
 	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
 	printf("sent !\n");
-	printf("Test: %ld\n",strlen(EnteredText));
+	printf("TestServer: %ld\n",strlen(EnteredText));
 }
 
 int SelectPort(int EnteredPort) {
@@ -122,9 +122,9 @@ int main(int argc, char *argv[]){
 
                 // }
                     else {
-                        printf("DID NOT HIT \n",buffer);
+                        printf("DID NOT HIT %s\n",buffer);
                         printf("length of buffer is: %ld\n", strlen(buffer)); 
-                        SendMessage(server_socket, buffer);
+                        SendMessage(client_socket, buffer);
                     }
             }
         }
