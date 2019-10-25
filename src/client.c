@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netdb.h>
+#include <stdbool.h>
 
 #define DEFAULTPORT 12345
 
@@ -26,6 +27,10 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 	printf("Test: %ld\n",strlen(EnteredText));
 }
 
+void ifstatment(char buffer) {
+
+}
+
 void func(int sockfd) 
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
@@ -38,19 +43,25 @@ void func(int sockfd)
         printf("Enter the string : "); 
         n = 0; 
 		//client input untill an 'enter' is input
-        while ((buff[n++] = getchar()) != '\n') 
-            ;
+        while ((buff[n++] = getchar()) != '\n');
 		// remove 'enter' from buffer
 		for(int u = 0; u < strlen(buff)-1; u++ ){
 			clientBuffer[u] = buff[u];
 		}
-		//send message to server
-		SendMessage(sockfd, clientBuffer);
-		//if input from client is 'exit' end loop
-        if ((strncmp(buff, "exit", 4)) == 0) { 
-            printf("Client Exit...\n"); 
-            break; 
-        } 
+        printf("-----> %s \n", clientBuffer);
+        if (strcmp("next", clientBuffer) == 0) {
+            printf("HIT \n");
+        }
+        else {
+            //send message to server
+            SendMessage(sockfd, clientBuffer);
+            //if input from client is 'exit' end loop
+            if ((strncmp(buff, "bye", 3)) == 0) { 
+                printf("Client Exit...\n"); 
+                exit(0); 
+            } 
+        }       
+        
     } 
 } 
 

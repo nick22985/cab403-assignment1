@@ -127,8 +127,8 @@ int main(int argc, char *argv[]){
 
                 }
                     else {
-                    printf("DID NOT HIT \n",buffer);
-                    printf("length of buffer is: %ld\n", strlen(buffer)); 
+                        printf("DID NOT HIT \n",buffer);
+                        printf("length of buffer is: %ld\n", strlen(buffer)); 
                 }
             }
         }
