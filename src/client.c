@@ -105,10 +105,13 @@ int main(int argc, char *argv[]) {
 
 	//print the server response
 	printf("The server said %s\n", server_response);
-
+	char buffer[256];
+	int n;
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);
+		n = read(network_socket,buffer,256);
+		printf("%s", buffer);
 
 	}
 
