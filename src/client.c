@@ -14,24 +14,39 @@
 #define DEFAULTPORT 12345
 
 
-#define MAX 256
+#define CLIENTBUFF 256
+
+
+
+//Has the Server print the EnteredText 
+void SendMessage(int DestinationSocket ,char *EnteredText){
+	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
+	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
+	printf("sent !\n");
+	printf("Test: %ld\n",strlen(EnteredText));
+}
+
+
 
 
 void func(int sockfd) 
 { 
-    char buff[MAX]; 
+    char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
     int n; 
     for (;;) { 
+		//clear buff
         bzero(buff, sizeof(buff)); 
+		bzero(clientBuffer, sizeof(buff));
+		//start accept user input
         printf("Enter the string : "); 
         n = 0; 
         while ((buff[n++] = getchar()) != '\n') 
-            ; 
-        write(sockfd, buff, strlen(buff)); 
-        bzero(buff, sizeof(buff)); 
-        read(sockfd, buff, strlen(buff)); 
-        printf("From Server : %s", buff); 
-		printf("length of buff is: %ld\n", strlen(buff));
+            ;
+		for(int u = 0; u < strlen(buff)-1; u++ ){
+			clientBuffer[u] = buff[u];
+		}
+		SendMessage(sockfd, clientBuffer);
+		//if input from client is 'exit' end loop
         if ((strncmp(buff, "exit", 4)) == 0) { 
             printf("Client Exit...\n"); 
             break; 
@@ -44,13 +59,7 @@ void func(int sockfd)
 
 
 
-//Has the Server print the EnteredText 
-void SendMessage(int DestinationSocket ,char *EnteredText){
-	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
-	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
-	printf("sent !\n");
-	printf("Test: %ld\n",strlen(EnteredText));
-}
+
 
 char client_response[256];
 
