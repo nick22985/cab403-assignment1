@@ -64,42 +64,42 @@ void func(int sockfd)
 char client_response[256];
 
 int main(int argc, char *argv[]) {
-//create socket
-int network_socket;
-network_socket = socket(AF_INET, SOCK_STREAM,0);
+	//create socket
+	int network_socket;
+	network_socket = socket(AF_INET, SOCK_STREAM,0);
 
-//specify an address for the socket
-struct sockaddr_in server_address;
-server_address.sin_family = AF_INET;
-server_address.sin_port = htons(DEFAULTPORT);
-server_address.sin_addr.s_addr = INADDR_ANY;
+	//specify an address for the socket
+	struct sockaddr_in server_address;
+	server_address.sin_family = AF_INET;
+	server_address.sin_port = htons(DEFAULTPORT);
+	server_address.sin_addr.s_addr = INADDR_ANY;
 
-int connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
-//connection error checking
-if (connection_status != 0){
-    printf("CONNECTION ERROR");
-}
+	int connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
+	//connection error checking
+	if (connection_status != 0){
+		printf("CONNECTION ERROR");
+	}
 
 
-//Send testing message
-SendMessage(network_socket, "next CHANNELID");
-SendMessage(network_socket, "BYE");
+	//Send testing message
+	SendMessage(network_socket, "next CHANNELID");
+	SendMessage(network_socket, "BYE");
 
-//recieve data from server
-char server_response[256];
-recv(network_socket, &server_response, sizeof(server_response),0);
+	//recieve data from server
+	char server_response[256];
+	recv(network_socket, &server_response, sizeof(server_response),0);
 
-//print the server response
-printf("The server said %s\n", server_response);
+	//print the server response
+	printf("The server said %s\n", server_response);
 
-while(1){
-	//CODE WHILE CONNECTED GOeS HERE
-	func(network_socket);
+	while(1){
+		//CODE WHILE CONNECTED GOeS HERE
+		func(network_socket);
 
-}
+	}
 
-//close connection
-close(network_socket);
+	//close connection
+	close(network_socket);
 
-return 0;
+	return 0;
 }
