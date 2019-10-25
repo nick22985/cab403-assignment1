@@ -92,8 +92,37 @@ int main(int argc, char *argv[]){
              printf("Test Function Here\n");
              //Function for server to run when next is run.
         }
+		        if ( strcmp("next CHANNELID", buffer) == 0) {
+             printf("NEXT CHANNELID Here\n");
+             //Function for server to run when next is run.
+        }
+		        if ( strcmp("sub CHANNELID", buffer) == 0) {
+             printf("SUB function Here\n");
+             //Function for server to run when next is run.
+        }
+		        if ( strcmp("unsub CHANNELID", buffer) == 0) {
+             printf("UNSUB function Here\n");
+             //Function for server to run when next is run.
+        }
+		        if ( strcmp("livefeed CHANNELID", buffer) == 0) {
+             printf("LIVEFEED CHANNELID Here\n");
+             //Function for server to run when next is run.
+        }
+		        if ( strcmp("livefeed", buffer) == 0) {
+             printf("LIVEFEED Here\n");
+             //Function for server to run when next is run.
+        }
+		        if ( strcmp("SEND CHANNELID MESSAGE", buffer) == 0) {
+             printf("SEND Here\n");
+             //Function for server to run when next is run.
+        }
+		        if ( strcmp("BYE", buffer) == 0) {
+             printf("BYE Here\n");
+             //Function for server to run when next is run.
+        }
+
         else {
-            printf("DID NOT HIT \n",buffer);
+            printf("DID NOT HIT \n",buffer); 
         }
         
 
