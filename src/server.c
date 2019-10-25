@@ -121,11 +121,11 @@ int main(int argc, char *argv[]){
                     printf("SEND Here\n");
                     //Function for server to run when next is run.
                 }
-                    else if ( strncmp("BYE", buffer, 3) == 0) {
-                    printf("BYE Here\n");
-                    //Function for server to run when next is run.
+                //     else if ( strncmp("BYE", buffer, 3) == 0) {
+                //     printf("BYE Here\n");
+                //     //Function for server to run when next is run.
 
-                }
+                // }
                     else {
                         printf("DID NOT HIT \n",buffer);
                         printf("length of buffer is: %ld\n", strlen(buffer)); 

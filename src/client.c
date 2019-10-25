@@ -52,14 +52,13 @@ void func(int sockfd)
         if (strcmp("next", clientBuffer) == 0) {
             printf("HIT \n");
         }
+		else if(strncmp(buff, "bye", 3) == 0){
+				printf("Client Exit...\n"); 
+                exit(0); 
+		}
         else {
             //send message to server
             SendMessage(sockfd, clientBuffer);
-            //if input from client is 'exit' end loop
-            if ((strncmp(buff, "bye", 3)) == 0) { 
-                printf("Client Exit...\n"); 
-                exit(0); 
-            } 
         }       
         
     } 
@@ -94,7 +93,6 @@ int main(int argc, char *argv[]) {
 
 	//Send testing message
 	SendMessage(network_socket, "next CHANNELID");
-	SendMessage(network_socket, "BYE");
 
 	//recieve data from server
 	char server_response[256];
