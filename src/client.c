@@ -26,9 +26,6 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 	printf("Test: %ld\n",strlen(EnteredText));
 }
 
-
-
-
 void func(int sockfd) 
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
