@@ -88,53 +88,49 @@ int main(int argc, char *argv[]){
         //send message
         send(client_socket, server_message, sizeof(server_message),0);
         while(1){
-
             bzero(buffer,256);
             n = read(client_socket,buffer,256);
-            printf("Client: %s\n",buffer);
-            //printf("%d\n", strcmp("next", buffer));
-            if ( strcmp("next", buffer) == 0) {
-                printf("Test Function Here\n");
-                //Function for server to run when next is run.
-            }
-                else if ( strcmp("next CHANNELID", buffer) == 0) {
-                printf("NEXT CHANNELID Here\n");
-                //Function for server to run when next is run.
-            }
-                else if ( strcmp("sub CHANNELID", buffer) == 0) {
-                printf("SUB function Here\n");
-                //Function for server to run when next is run.
-            }
-                else if ( strcmp("unsub CHANNELID", buffer) == 0) {
-                printf("UNSUB function Here\n");
-                //Function for server to run when next is run.
-            }
-                else if ( strcmp("livefeed CHANNELID", buffer) == 0) {
-                printf("LIVEFEED CHANNELID Here\n");
-                //Function for server to run when next is run.
-            }
-                else if ( strcmp("livefeed", buffer) == 0) {
-                printf("LIVEFEED Here\n");
-                //Function for server to run when next is run.
-            }
-                else if ( strcmp("SEND CHANNELID MESSAGE", buffer) == 0) {
-                printf("SEND Here\n");
-                //Function for server to run when next is run.
-            }
-                else if ( strncmp("BYE", buffer, 3) == 0) {
-                printf("BYE Here\n");
-                //Function for server to run when next is run.
+            if (strlen(buffer) != 0) {
+                printf("Client: %s\n",buffer);
+                //printf("%d\n", strcmp("next", buffer));
+                if ( strcmp("next", buffer) == 0) {
+                    printf("Test Function Here\n");
+                    //Function for server to run when next is run.
+                }
+                    else if ( strcmp("next CHANNELID", buffer) == 0) {
+                    printf("NEXT CHANNELID Here\n");
+                    //Function for server to run when next is run.
+                }
+                    else if ( strcmp("sub CHANNELID", buffer) == 0) {
+                    printf("SUB function Here\n");
+                    //Function for server to run when next is run.
+                }
+                    else if ( strcmp("unsub CHANNELID", buffer) == 0) {
+                    printf("UNSUB function Here\n");
+                    //Function for server to run when next is run.
+                }
+                    else if ( strcmp("livefeed CHANNELID", buffer) == 0) {
+                    printf("LIVEFEED CHANNELID Here\n");
+                    //Function for server to run when next is run.
+                }
+                    else if ( strcmp("livefeed", buffer) == 0) {
+                    printf("LIVEFEED Here\n");
+                    //Function for server to run when next is run.
+                }
+                    else if ( strcmp("SEND CHANNELID MESSAGE", buffer) == 0) {
+                    printf("SEND Here\n");
+                    //Function for server to run when next is run.
+                }
+                    else if ( strncmp("BYE", buffer, 3) == 0) {
+                    printf("BYE Here\n");
+                    //Function for server to run when next is run.
 
+                }
+                    else {
+                    printf("DID NOT HIT \n",buffer);
+                    printf("length of buffer is: %ld\n", strlen(buffer)); 
+                }
             }
-                else {
-                printf("DID NOT HIT \n",buffer);
-                printf("length of buffer is: %ld\n", strlen(buffer)); 
-            }
-            
-
-            
-            
-
         }
 		
 	}
