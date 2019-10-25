@@ -44,7 +44,7 @@ if (connection_status != 0){
 
 //Send testing message
 SendMessage(network_socket, "next CHANNELID");
-
+SendMessage(network_socket, "BYE");
 
 //recieve data from server
 char server_response[256];
