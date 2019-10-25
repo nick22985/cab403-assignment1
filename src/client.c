@@ -14,6 +14,36 @@
 #define DEFAULTPORT 12345
 
 
+#define MAX 256
+
+
+void func(int sockfd) 
+{ 
+    char buff[MAX]; 
+    int n; 
+    for (;;) { 
+        bzero(buff, sizeof(buff)); 
+        printf("Enter the string : "); 
+        n = 0; 
+        while ((buff[n++] = getchar()) != '\n') 
+            ; 
+        write(sockfd, buff, strlen(buff)); 
+        bzero(buff, sizeof(buff)); 
+        read(sockfd, buff, strlen(buff)); 
+        printf("From Server : %s", buff); 
+		printf("length of buff is: %ld\n", strlen(buff));
+        if ((strncmp(buff, "exit", 4)) == 0) { 
+            printf("Client Exit...\n"); 
+            break; 
+        } 
+    } 
+} 
+
+
+
+
+
+
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
@@ -55,7 +85,7 @@ printf("The server said %s\n", server_response);
 
 while(1){
 	//CODE WHILE CONNECTED GOeS HERE
-
+	func(network_socket);
 
 }
 

@@ -53,7 +53,7 @@ int SelectPort(int EnteredPort) {
 
 
 int main(int argc, char *argv[]){
-    char server_message[256] = "You have reached the server. Yes cunt.";
+    char server_message[256] = "You have reached the server. Yes cunt.\n";
 
 	//Int to refer to Buffer by
 	int n;
@@ -85,6 +85,8 @@ int main(int argc, char *argv[]){
         addr_size = sizeof serverStorage;
     	client_socket = accept(server_socket, (struct sockaddr *) &serverStorage, &addr_size);
 
+        //send message
+        send(client_socket, server_message, sizeof(server_message),0);
         while(1){
 
             bzero(buffer,256);
@@ -119,18 +121,20 @@ int main(int argc, char *argv[]){
                 printf("SEND Here\n");
                 //Function for server to run when next is run.
             }
-                else if ( strcmp("BYE", buffer) == 0) {
+                else if ( strncmp("BYE", buffer, 3) == 0) {
                 printf("BYE Here\n");
                 //Function for server to run when next is run.
+
             }
                 else {
-                printf("DID NOT HIT \n",buffer); 
+                printf("DID NOT HIT \n",buffer);
+                printf("length of buffer is: %ld\n", strlen(buffer)); 
             }
             
 
             
-            //send message
-            send(client_socket, server_message, sizeof(server_message),0);
+            
+
         }
 		
 	}
