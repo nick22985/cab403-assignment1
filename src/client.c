@@ -16,8 +16,10 @@
 
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
-	send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
+	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
+	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
 	printf("sent !\n");
+	printf("Test: %ld\n",strlen(EnteredText));
 }
 
 char client_response[256];
