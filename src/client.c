@@ -49,12 +49,17 @@ void func(int sockfd)
 			clientBuffer[u] = buff[u];
 		}
         printf("-----> %s \n", clientBuffer);
+		//next channel
         if (strcmp("next", clientBuffer) == 0) {
-            printf("HIT \n");
+            printf("PROCESS NEXT CHANNEL \n");
         }
+		else if(strncmp("next ", clientBuffer, 5) == 0){
+			printf("PROCESS NEXT CHANNEL BY ID \n");
+		}
+		//client BYE termination
 		else if(strncmp(buff, "bye", 3) == 0){
-				printf("Client Exit...\n"); 
-                exit(0); 
+			printf("Client Exit...\n"); 
+			exit(0); 
 		}
         else {
             //send message to server

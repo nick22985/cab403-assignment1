@@ -102,29 +102,34 @@ int main(int argc, char *argv[]){
                     printf("Test Function Here\n");
                     //Function for server to run when next is run.
                 }
-                    else if ( strcmp("next CHANNELID", buffer) == 0) {
+                else if ( strcmp("next CHANNELID", buffer) == 0) {
                     printf("NEXT CHANNELID Here\n");
                     //Function for server to run when next is run.
                 }
-                    else if ( strcmp("sub CHANNELID", buffer) == 0) {
+                else if ( strcmp("sub CHANNELID", buffer) == 0) {
                     printf("SUB function Here\n");
                     //Function for server to run when next is run.
                 }
-                    else if ( strcmp("unsub CHANNELID", buffer) == 0) {
+                else if ( strcmp("unsub CHANNELID", buffer) == 0) {
                     printf("UNSUB function Here\n");
                     //Function for server to run when next is run.
                 }
-                    else if ( strcmp("livefeed CHANNELID", buffer) == 0) {
+                else if ( strcmp("livefeed CHANNELID", buffer) == 0) {
                     printf("LIVEFEED CHANNELID Here\n");
                     //Function for server to run when next is run.
                 }
-                    else if ( strcmp("livefeed", buffer) == 0) {
+                else if ( strcmp("livefeed", buffer) == 0) {
                     printf("LIVEFEED Here\n");
                     //Function for server to run when next is run.
                 }
-                    else if ( strcmp("SEND CHANNELID MESSAGE", buffer) == 0) {
+                else if ( strcmp("SEND CHANNELID MESSAGE", buffer) == 0) {
                     printf("SEND Here\n");
                     //Function for server to run when next is run.
+                }
+                else if ( strcmp("CHANNELS", buffer) == 0){
+                    printf("CHANNELS .........");
+                    //Function for server to when next is run
+
                 }
                 //     else if ( strncmp("BYE", buffer, 3) == 0) {
                 //     printf("BYE Here\n");
