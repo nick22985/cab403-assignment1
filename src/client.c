@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
 
 	//Send testing message
 	SendMessage(network_socket, "next CHANNELID");
-	bzero(buffer,256);
+	
 
 	//recieve data from server
 	char server_response[256];
@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
 		func(network_socket);
 		n = read(network_socket,buffer,256);
 		printf("%s", buffer);
-
+		bzero(buffer,256);
 	}
 
 	//close connection
