@@ -40,11 +40,14 @@ void func(int sockfd)
 		//start accept user input
         printf("Enter the string : "); 
         n = 0; 
+		//client input untill an 'enter' is input
         while ((buff[n++] = getchar()) != '\n') 
             ;
+		// remove 'enter' from buffer
 		for(int u = 0; u < strlen(buff)-1; u++ ){
 			clientBuffer[u] = buff[u];
 		}
+		//send message to server
 		SendMessage(sockfd, clientBuffer);
 		//if input from client is 'exit' end loop
         if ((strncmp(buff, "exit", 4)) == 0) { 
