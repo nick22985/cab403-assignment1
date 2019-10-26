@@ -41,6 +41,15 @@ void ifstatment(char buffer) {
 
 }
 
+// int StringSplit(char InputText){
+// 	char token = strtok(InputText, " ");
+
+// 	while (token != NULL){
+// 		printf("%s\n", token);
+// 		token = strtok(NULL, " ");
+// 	}
+// }
+
 void func(int sockfd) 
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
@@ -86,10 +95,14 @@ void func(int sockfd)
 
 char client_response[256];
 
+char ClientSideSampleArray[100][1024];
+
 int main(int argc, char *argv[]) {
 	//create socket
 	int network_socket;
 	network_socket = socket(AF_INET, SOCK_STREAM,0);
+
+	// StringSplit("This is a test string");
 
 	//specify an address for the socket
 	struct sockaddr_in server_address;
@@ -112,6 +125,12 @@ int main(int argc, char *argv[]) {
 	//recieve data from server
 	char server_response[256];
 	recv(network_socket, &server_response, sizeof(server_response),0);
+	int LoopLimit = 3;
+	// for (int i = 0; i < LoopLimit; i++){
+	// 	ClientSideSampleArray[i] = server_response;
+	// 	printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[i]);
+	// }
+
 
 	//print the server response
 	printf("The server said %s\n", server_response);
@@ -121,13 +140,20 @@ int main(int argc, char *argv[]) {
 
 
 
-
+int Counter = 0;
 
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);
 		n = read(network_socket,buffer,256);
-		printf("%s", buffer);
+		printf("%s IS THE BUFFER", buffer);
+
+		strcpy(ClientSideSampleArray[Counter], buffer);
+	
+		printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[0]);
+		printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[1]);	
+		Counter = Counter+1;
+		printf("COunter -->> %d\n", Counter);
 
 		bzero(buffer,256);
 	}
