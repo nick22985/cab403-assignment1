@@ -53,11 +53,18 @@ void ifstatment(char buffer) {
 int nextMessage(int currentMsgID, char ClientSideMessageStorage[1000][1024])
 {
 	currentMsgID = currentMsgID+1;
-	// TEST print current messageID
-	printf("NEXT MESSAGE ID: %d\n", currentMsgID);
-	// Print next message
-	printf("PROCESSING NEXT CHANNEL: %s\n", ClientSideMessageStorage[currentMsgID]);
-	return currentMsgID;
+	if (ClientSideMessageStorage[currentMsgID] == NULL){
+		// TEST print current messageID
+		printf("NEXT MESSAGE ID: %d\n", currentMsgID);
+		// Print next message
+		printf("PROCESSING NEXT CHANNEL: %s\n", ClientSideMessageStorage[currentMsgID]);
+		return currentMsgID;
+	} else {
+		printf("Message with ID %d is null\n", currentMsgID);
+		currentMsgID = currentMsgID-1;
+		return currentMsgID;
+	}
+
 } 
 
 
@@ -106,6 +113,11 @@ char client_response[256];
 
 
 int main(int argc, char *argv[]) {
+
+	int ChosenPort = DEFAULTPORT;
+    if(argc == 3){
+    ChosenPort = atoi(argv[2]);
+    }
 	//create socket
 	int network_socket;
 	network_socket = socket(AF_INET, SOCK_STREAM,0);
@@ -115,7 +127,7 @@ int main(int argc, char *argv[]) {
 	//specify an address for the socket
 	struct sockaddr_in server_address;
 	server_address.sin_family = AF_INET;
-	server_address.sin_port = htons(DEFAULTPORT);
+	server_address.sin_port = htons(ChosenPort);
 	server_address.sin_addr.s_addr = INADDR_ANY;
 
 	int connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
@@ -163,6 +175,8 @@ int main(int argc, char *argv[]) {
 
 		strcpy(ClientSideMessageStorage[Counter], buffer);
 
+			strcpy(ClientSideMessageStorage[Counter], buffer);
+		}
 		Counter = Counter+1;
 		printf("COunter -->> %d\n", Counter);
 
