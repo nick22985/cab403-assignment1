@@ -45,23 +45,23 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-char ParseMessage (char *WhatWasEntered){
+// char ParseMessage (char *WhatWasEntered){
 
-	char OriginalInput = WhatWasEntered;
-	char * OutPutString;
+// 	char OriginalInput = WhatWasEntered;
+// 	char * OutPutString;
 
-    printf("PARSING STRING --> %s\n",WhatWasEntered);
+//     printf("PARSING STRING --> %s\n",WhatWasEntered);
 
-    OutPutString = strtok(WhatWasEntered, " ");
-	printf("METHOD TO CALL --> %s\n", OutPutString);
+//     OutPutString = strtok(WhatWasEntered, " ");
+// 	printf("METHOD TO CALL --> %s\n", OutPutString);
 
-    OutPutString = strtok(OutPutString, " ");
-	printf("CHANNEL ID --> %s\n", OutPutString);
+//     OutPutString = strtok(OutPutString, " ");
+// 	printf("CHANNEL ID --> %s\n", OutPutString);
 
-    OutPutString = strtok(WhatWasEntered, " ");
-	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
+//     OutPutString = strtok(WhatWasEntered, " ");
+// 	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
 
-}
+// }
 
 int main(int argc, char *argv[]){
     int fd;
