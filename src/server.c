@@ -13,8 +13,7 @@
 #include <stdbool.h>
 #include <termios.h> 		// Stop Terminal Echo
 #include <pthread.h>
-
-
+#include <sys/time.h>
 
 #define DEFAULTPORT 12345
 #define server_buff 256
@@ -46,11 +45,15 @@ int SelectPort(int EnteredPort) {
 int main(int argc, char *argv[]){
     char server_message[256] = "You have reached the server. Yes cunt.\n";
 
+    //start clock
+    time_t Server_Starttime = time(NULL);
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
+
+
 	//Int to refer to Buffer by
 	int n;
 	int EnteredPort = atoi(argv[0]);
-
-
 
     struct sockaddr_storage serverStorage;
     socklen_t addr_size;
@@ -125,7 +128,14 @@ int main(int argc, char *argv[]){
                         printf("DID NOT HIT %s\n",buffer);
                         printf("length of buffer is: %ld\n", strlen(buffer)); 
                         SendMessage(client_socket, buffer);
+                        //Prints time of message sending
+                        gettimeofday(&end, NULL);
+                        long seconds = (end.tv_sec - start.tv_sec);
+                        long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+                        printf("Time elpased is %ld seconds and %ld micros\n", seconds, micros);
+                        //clear the buffer for use again
                         bzero(buffer,sizeof(buffer));
+
                     }
             }
         }
