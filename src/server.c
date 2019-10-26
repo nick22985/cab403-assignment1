@@ -18,7 +18,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#define SHARED_OBJECT_PATH
+#define SHARED_OBJECT_PATH NULL 
 #define DEFAULTPORT 12345
 #define server_buff 256
 
@@ -45,23 +45,23 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-// char ParseMessage (char *WhatWasEntered){
+char ParseMessage (char *WhatWasEntered){
 
-// 	char OriginalInput = WhatWasEntered;
-// 	char * OutPutString;
+	char OriginalInput = WhatWasEntered;
+	char * OutPutString;
 
-//     printf("PARSING STRING --> %s\n",WhatWasEntered);
+    printf("PARSING STRING --> %s\n",WhatWasEntered);
 
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("METHOD TO CALL --> %s\n", OutPutString);
+    OutPutString = strtok(WhatWasEntered, " ");
+	printf("METHOD TO CALL --> %s\n", OutPutString);
 
-//     OutPutString = strtok(OutPutString, " ");
-// 	printf("CHANNEL ID --> %s\n", OutPutString);
+    OutPutString = strtok(OutPutString, " ");
+	printf("CHANNEL ID --> %s\n", OutPutString);
 
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
+    OutPutString = strtok(WhatWasEntered, " ");
+	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
 
-// }
+}
 
 int main(int argc, char *argv[]){
     int fd;
@@ -80,7 +80,26 @@ int main(int argc, char *argv[]){
     gettimeofday(&start, NULL);
 
     //MEMORY
+	int shared_seg_size = (sizeof(thevaultpacket_t));   /* We want a shared segment capable of storing one message */
+	thevaultpacket_t* shared_msg;      /* the shared segment, and head of the messages list */
 
+	fd = shm_open(SHARED_OBJECT_PATH, O_CREAT | O_EXCL | O_RDWR, S_IRWXU | S_IRWXG);
+    
+	if (fd < 0) {
+		perror("In shm_open()");
+		exit(1);
+	}
+	fprintf(stderr, "Created shared memory object %s\n", SHARED_OBJECT_PATH);
+
+	/* Adjust mapped file size (make room for the whole segment to map) using ftruncate(). */
+	ftruncate(fd, shared_seg_size);
+
+	/* Request the shared segment using mmap(). */    
+	shared_msg = (thevaultpacket_t*)mmap(NULL, shared_seg_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	if (shared_msg == NULL) {
+		perror("In mmap()");
+		exit(1);
+	}
 
 	//Int to refer to Buffer by
 	int n;
@@ -88,8 +107,6 @@ int main(int argc, char *argv[]){
 
     struct sockaddr_storage serverStorage;
     socklen_t addr_size;
-
-    int MessageCount = 0;
 
     //create server socket
     int server_socket;
@@ -116,8 +133,6 @@ int main(int argc, char *argv[]){
         while(1){
             bzero(buffer,256);  
             n = read(client_socket,buffer,256);
-            MessageCount = MessageCount +1;
-            printf("Messages recieved so far -->%d\n" , MessageCount);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
                 //printf("%d\n", strcmp("next", buffer));

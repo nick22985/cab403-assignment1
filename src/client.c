@@ -128,12 +128,6 @@ int main(int argc, char *argv[]) {
 		func(network_socket);
 		n = read(network_socket,buffer,256);
 		printf("%s", buffer);
-		//Mem Allocation meloc Buffer Message Server Message
-		// char *a = (char *)malloc(sizeof(char) * n);
-		// if (a == NULL) {
-		// 	printf("memory allocation failed\n");
-		// 	return EXIT_FAILURE;
-    	// }
 
 		bzero(buffer,256);
 	}
