@@ -53,11 +53,18 @@ void ifstatment(char buffer) {
 int nextMessage(int currentMsgID, char ClientSideMessageStorage[1000][1024])
 {
 	currentMsgID = currentMsgID+1;
-	// TEST print current messageID
-	printf("NEXT MESSAGE ID: %d\n", currentMsgID);
-	// Print next message
-	printf("PROCESSING NEXT CHANNEL: %s\n", ClientSideMessageStorage[currentMsgID]);
-	return currentMsgID;
+	if (ClientSideMessageStorage[currentMsgID] == NULL){
+		// TEST print current messageID
+		printf("NEXT MESSAGE ID: %d\n", currentMsgID);
+		// Print next message
+		printf("PROCESSING NEXT CHANNEL: %s\n", ClientSideMessageStorage[currentMsgID]);
+		return currentMsgID;
+	} else {
+		printf("Message with ID %d is null\n", currentMsgID);
+		currentMsgID = currentMsgID-1;
+		return currentMsgID;
+	}
+
 } 
 
 
@@ -159,10 +166,10 @@ int main(int argc, char *argv[]) {
 		// If user input is NEXT 
 		if (strncmp("NEXT", buffer, 4) ==0){
 			currentMsgID = nextMessage(currentMsgID, ClientSideMessageStorage);
-		}
+		} else {
 
-		strcpy(ClientSideMessageStorage[Counter], buffer);
-	
+			strcpy(ClientSideMessageStorage[Counter], buffer);
+		}
 		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[0]);
 		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[1]);
 		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[2]);
