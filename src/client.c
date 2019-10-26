@@ -95,7 +95,6 @@ void func(int sockfd)
 
 char client_response[256];
 
-char ClientSideSampleArray[100][1024];
 
 int main(int argc, char *argv[]) {
 	//create socket
@@ -139,7 +138,7 @@ int main(int argc, char *argv[]) {
 
 
 
-
+char ClientSideMessageStorage[1000][1024];
 int Counter = 0;
 
 	while(1){
@@ -148,10 +147,14 @@ int Counter = 0;
 		n = read(network_socket,buffer,256);
 		printf("%s IS THE BUFFER", buffer);
 
-		strcpy(ClientSideSampleArray[Counter], buffer);
+		strcpy(ClientSideMessageStorage[Counter], buffer);
 	
-		printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[0]);
-		printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[1]);	
+		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[0]);
+		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[1]);
+		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[2]);
+		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[3]);
+		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[4]);
+
 		Counter = Counter+1;
 		printf("COunter -->> %d\n", Counter);
 
