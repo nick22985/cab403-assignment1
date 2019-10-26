@@ -66,7 +66,8 @@ void func(int sockfd)
         else {
             //send message to server
             SendMessage(sockfd, clientBuffer);
-			bzero(clientBuffer,256);
+			bzero(clientBuffer,sizeof(clientBuffer));
+			bzero(buff,sizeof(buff));
 			break;
         }       
         break;
