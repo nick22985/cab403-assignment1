@@ -14,7 +14,11 @@
 #include <termios.h> 		// Stop Terminal Echo
 #include <pthread.h>
 #include <sys/time.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
+#define SHARED_OBJECT_PATH
 #define DEFAULTPORT 12345
 #define server_buff 256
 
@@ -41,12 +45,11 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-
 char ParseMessage (char *WhatWasEntered){
 
 	char OriginalInput = WhatWasEntered;
 	char * OutPutString;
-    
+
     printf("PARSING STRING --> %s\n",WhatWasEntered);
 
     OutPutString = strtok(WhatWasEntered, " ");
@@ -61,14 +64,13 @@ char ParseMessage (char *WhatWasEntered){
 }
 
 int main(int argc, char *argv[]){
-typedef struct theVault theVault ;
-struct TheVault {
-    int messageID;
-    int channelID;
-    int time;
-    char message;
-    };
-
+    int fd;
+    typedef struct thevault {
+        int messageID;
+        int channelID;
+        int time;
+        char message;
+        }thevaultpacket;
 
     char server_message[256] = "You have reached the server. Yes cunt.\n";
 
@@ -77,6 +79,7 @@ struct TheVault {
     struct timeval start, end;
     gettimeofday(&start, NULL);
 
+    //MEMORY
 
 	//Int to refer to Buffer by
 	int n;
