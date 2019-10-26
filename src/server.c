@@ -45,23 +45,23 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-// char ParseMessage (char *WhatWasEntered){
+char ParseMessage (char *WhatWasEntered){
 
-// 	char OriginalInput = WhatWasEntered;
-// 	char * OutPutString;
+	char OriginalInput = WhatWasEntered;
+	char * OutPutString;
 
-//     printf("PARSING STRING --> %s\n",WhatWasEntered);
+    printf("PARSING STRING --> %s\n",WhatWasEntered);
 
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("METHOD TO CALL --> %s\n", OutPutString);
+    OutPutString = strtok(WhatWasEntered, " ");
+	printf("METHOD TO CALL --> %s\n", OutPutString);
 
-//     OutPutString = strtok(OutPutString, " ");
-// 	printf("CHANNEL ID --> %s\n", OutPutString);
+    OutPutString = strtok(OutPutString, " ");
+	printf("CHANNEL ID --> %s\n", OutPutString);
 
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
+    OutPutString = strtok(WhatWasEntered, " ");
+	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
 
-// }
+}
 
 int main(int argc, char *argv[]){
     int fd;
@@ -91,11 +91,9 @@ int main(int argc, char *argv[]){
 	}
 	fprintf(stderr, "Created shared memory object %p\n", SHARED_OBJECT_PATH);
 
-	/* Adjust mapped file size (make room for the whole segment to map) using ftruncate(). */
-	ftruncate(fd, shared_seg_size);
+    ftruncate(fd, shared_seg_size);
 
-	/* Request the shared segment using mmap(). */    
-	shared_msg = (thevaultpacket_t*)mmap(NULL, shared_seg_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    shared_msg = (thevaultpacket_t*)mmap(NULL, shared_seg_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	if (shared_msg == NULL) {
 		perror("In mmap()");
 		exit(1);
@@ -190,6 +188,11 @@ int main(int argc, char *argv[]){
             }
         }
 		
+	}
+
+    if (shm_unlink(SHARED_OBJECT_PATH) != 0) {
+		perror("In shm_unlink()");
+		exit(1);
 	}
 	
 	//close socket
