@@ -170,12 +170,6 @@ int main(int argc, char *argv[]) {
 
 			strcpy(ClientSideMessageStorage[Counter], buffer);
 		}
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[0]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[1]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[2]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[3]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[4]);
-
 		Counter = Counter+1;
 		printf("COunter -->> %d\n", Counter);
 
