@@ -171,9 +171,13 @@ int main(int argc, char *argv[]) {
 		// If user input is NEXT 
 		if (strncmp("NEXT", buffer, 4) ==0){
 			currentMsgID = nextMessage(currentMsgID, ClientSideMessageStorage);
+<<<<<<< HEAD
 		}
 
 		strcpy(ClientSideMessageStorage[Counter], buffer);
+=======
+		} else {
+>>>>>>> e2be63baf0f26827695cb5cc0f913146fcf472b0
 
 			strcpy(ClientSideMessageStorage[Counter], buffer);
 		}
