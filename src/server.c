@@ -45,23 +45,23 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-char ParseMessage (char *WhatWasEntered){
+// char ParseMessage (char *WhatWasEntered){
 
-	char OriginalInput = WhatWasEntered;
-	char * OutPutString;
+// 	char OriginalInput = WhatWasEntered;
+// 	char * OutPutString;
 
-    printf("PARSING STRING --> %s\n",WhatWasEntered);
+//     printf("PARSING STRING --> %s\n",WhatWasEntered);
 
-    OutPutString = strtok(WhatWasEntered, " ");
-	printf("METHOD TO CALL --> %s\n", OutPutString);
+//     OutPutString = strtok(WhatWasEntered, " ");
+// 	printf("METHOD TO CALL --> %s\n", OutPutString);
 
-    OutPutString = strtok(OutPutString, " ");
-	printf("CHANNEL ID --> %s\n", OutPutString);
+//     OutPutString = strtok(OutPutString, " ");
+// 	printf("CHANNEL ID --> %s\n", OutPutString);
 
-    OutPutString = strtok(WhatWasEntered, " ");
-	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
+//     OutPutString = strtok(WhatWasEntered, " ");
+// 	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
 
-}
+// }
 
 int main(int argc, char *argv[]){
     int fd;
@@ -89,6 +89,8 @@ int main(int argc, char *argv[]){
     struct sockaddr_storage serverStorage;
     socklen_t addr_size;
 
+    int MessageCount = 0;
+
     //create server socket
     int server_socket;
     server_socket = socket(AF_INET, SOCK_STREAM,0);
@@ -114,6 +116,8 @@ int main(int argc, char *argv[]){
         while(1){
             bzero(buffer,256);  
             n = read(client_socket,buffer,256);
+            MessageCount = MessageCount +1;
+            printf("Messages recieved so far -->%d\n" , MessageCount);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
                 //printf("%d\n", strcmp("next", buffer));
