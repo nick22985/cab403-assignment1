@@ -142,11 +142,11 @@ int main(int argc, char *argv[]){
                 //SampleArray[0] = buffer;
                 //printf("SampleArray position 0 is --> %s\n", SampleArray[0]);
                 //printf("%d\n", strcmp("next", buffer));
-                if ( strcmp("next", buffer) == 0) {
-                    printf("Test Function Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("next CHANNELID", buffer) == 0) {
+                // if ( strcmp("next", buffer) == 0) {
+                //     printf("Test Function Here\n");
+                //     //Function for server to run when next is run.
+                // }
+                if ( strcmp("next CHANNELID", buffer) == 0) {
                     printf("NEXT CHANNELID Here\n");
                     //Function for server to run when next is run.
                 }

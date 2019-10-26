@@ -50,7 +50,18 @@ void ifstatment(char buffer) {
 // 	}
 // }
 
-void func(int sockfd) 
+int nextMessage(int currentMsgID, char ClientSideMessageStorage[1000][1024])
+{
+	currentMsgID = currentMsgID+1;
+	// TEST print current messageID
+	printf("NEXT MESSAGE ID: %d\n", currentMsgID);
+	// Print next message
+	printf("PROCESSING NEXT CHANNEL: %s\n", ClientSideMessageStorage[currentMsgID]);
+	return currentMsgID;
+} 
+
+
+void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentMsgID) 
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
     int n; 
@@ -70,9 +81,7 @@ void func(int sockfd)
         printf("-----> %s \n", clientBuffer);
 
 
-		//next channel
-        // if (strcmp("next", clientBuffer) == 0) {
-        //     printf("PROCESS NEXT CHANNEL \n");
+		
         // }
 		// else if(strncmp("next ", clientBuffer, 5) == 0){
 		// 	printf("PROCESS NEXT CHANNEL BY ID \n");
@@ -137,15 +146,20 @@ int main(int argc, char *argv[]) {
 	int n;
 
 
-
-char ClientSideMessageStorage[1000][1024];
-int Counter = 0;
+	int currentMsgID = 0;
+	char ClientSideMessageStorage[1000][1024];
+	int Counter = 0;
 
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
-		func(network_socket);
+		func(network_socket);//, ClientSideMessageStorage, currentMsgID);
 		n = read(network_socket,buffer,256);
-		printf("%s IS THE BUFFER", buffer);
+		printf("%s IS THE BUFFER\n", buffer);
+
+		// If user input is NEXT 
+		if (strncmp("NEXT", buffer, 4) ==0){
+			currentMsgID = nextMessage(currentMsgID, ClientSideMessageStorage);
+		}
 
 		strcpy(ClientSideMessageStorage[Counter], buffer);
 
