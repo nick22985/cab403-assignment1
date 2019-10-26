@@ -115,8 +115,6 @@ int main(int argc, char *argv[]){
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
-
-                ParseMessage(buffer);
                 //printf("%d\n", strcmp("next", buffer));
                 if ( strcmp("next", buffer) == 0) {
                     printf("Test Function Here\n");
