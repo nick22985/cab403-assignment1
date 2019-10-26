@@ -42,6 +42,24 @@ int SelectPort(int EnteredPort) {
 }
 
 
+char ParseMessage (char *WhatWasEntered){
+
+	char OriginalInput = WhatWasEntered;
+	char * OutPutString;
+    
+    printf("PARSING STRING --> %s\n",WhatWasEntered);
+
+    OutPutString = strtok(WhatWasEntered, " ");
+	printf("METHOD TO CALL --> %s\n", OutPutString);
+
+    OutPutString = strtok(OutPutString, " ");
+	printf("CHANNEL ID --> %s\n", OutPutString);
+
+    OutPutString = strtok(WhatWasEntered, " ");
+	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
+
+}
+
 int main(int argc, char *argv[]){
 typedef struct theVault theVault ;
 struct TheVault {
@@ -94,6 +112,8 @@ struct TheVault {
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
+
+                ParseMessage(buffer);
                 //printf("%d\n", strcmp("next", buffer));
                 if ( strcmp("next", buffer) == 0) {
                     printf("Test Function Here\n");

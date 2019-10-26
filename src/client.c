@@ -18,7 +18,17 @@
 #define CLIENTBUFF 256
 
 
+// char ParseMessage (char WhatWasEntered){
 
+// 	char OriginalInput = WhatWasEntered;
+// 	char SplitCharacter = " ";
+	
+// 	char WhatMethod = strtok(WhatWasEntered, SplitCharacter);
+
+// 	printf(WhatMethod);
+
+
+// }
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
@@ -52,14 +62,14 @@ void func(int sockfd)
 
 
 		//next channel
-        if (strcmp("next", clientBuffer) == 0) {
-            printf("PROCESS NEXT CHANNEL \n");
-        }
-		else if(strncmp("next ", clientBuffer, 5) == 0){
-			printf("PROCESS NEXT CHANNEL BY ID \n");
-		}
+        // if (strcmp("next", clientBuffer) == 0) {
+        //     printf("PROCESS NEXT CHANNEL \n");
+        // }
+		// else if(strncmp("next ", clientBuffer, 5) == 0){
+		// 	printf("PROCESS NEXT CHANNEL BY ID \n");
+		// }
 		//client BYE termination
-		else if(strncmp(buff, "bye", 3) == 0){
+		if(strncmp(buff, "bye", 3) == 0){
 			printf("Client Exit...\n"); 
 			exit(0); 
 		}
@@ -96,7 +106,7 @@ int main(int argc, char *argv[]) {
 
 
 	//Send testing message
-	SendMessage(network_socket, "next CHANNELID");
+	//SendMessage(network_socket, "next CHANNELID");
 	
 
 	//recieve data from server
