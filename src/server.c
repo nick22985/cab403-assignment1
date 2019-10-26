@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
         char message;
         }thevaultpacket_t;
 
-    char server_message[256] = "Welcome! Your client ID is %d\n";
+    char server_message[256] = "You have reached the server. Yes cunt.\n";
 
     //start clock
     time_t Server_Starttime = time(NULL);
@@ -107,7 +107,11 @@ int main(int argc, char *argv[]){
 
 	//Int to refer to Buffer by
 	int n;
-	int EnteredPort = atoi(argv[0]);
+    int ChosenPort = DEFAULTPORT;
+    if(argc == 2){
+    ChosenPort = atoi(argv[1]);
+    }
+
 
     struct sockaddr_storage serverStorage;
     socklen_t addr_size;
@@ -119,7 +123,7 @@ int main(int argc, char *argv[]){
     //address structure
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(SelectPort(EnteredPort));
+    server_address.sin_port = htons(SelectPort(ChosenPort));
     server_address.sin_addr.s_addr = INADDR_ANY;
 
     //bind the socket to specified IP and port
@@ -142,11 +146,11 @@ int main(int argc, char *argv[]){
                 //SampleArray[0] = buffer;
                 //printf("SampleArray position 0 is --> %s\n", SampleArray[0]);
                 //printf("%d\n", strcmp("next", buffer));
-                if ( strcmp("next", buffer) == 0) {
-                    printf("Test Function Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("next CHANNELID", buffer) == 0) {
+                // if ( strcmp("next", buffer) == 0) {
+                //     printf("Test Function Here\n");
+                //     //Function for server to run when next is run.
+                // }
+                if ( strcmp("next CHANNELID", buffer) == 0) {
                     printf("NEXT CHANNELID Here\n");
                     //Function for server to run when next is run.
                 }
@@ -183,13 +187,21 @@ int main(int argc, char *argv[]){
                     else {
                         printf("NOT RECOGNISED COMMAND\n");
                         //printf("length of buffer is: %ld\n", strlen(buffer)); 
-                        SendMessage(client_socket, buffer);
+                        
                         //Prints time of message sending
                         gettimeofday(&end, NULL);
                         long seconds = (end.tv_sec - start.tv_sec);
                         long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
                         printf("Time elpased is %ld seconds and %ld micros\n", seconds, micros);
                         //clear the buffer for use again
+                        // char temp1format;
+                        // char temp2format;
+                        // temp1format = strcat("|", buffer); 
+                        // temp2format = strcat(temp1format, "|"); 
+                        // temp1format = strcat("|", temp2format); 
+                        // temp2format = strcat(temp1format, "|"); 
+                        // printf("%d", temp1format);
+                        SendMessage(client_socket, buffer);
                         bzero(buffer,sizeof(buffer));
 
                     }
@@ -202,7 +214,7 @@ int main(int argc, char *argv[]){
 		perror("In shm_unlink()");
 		exit(1);
 	}
-	
+
 	//close socket
     close(server_socket);
 

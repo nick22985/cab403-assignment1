@@ -17,20 +17,21 @@
 
 #define CLIENTBUFF 256
 
-//A set of skeleton methods, partially complete and indicating intended function
 
-// void SUB(int ChannelID){
-// 	if(ChannelID IS NOT ALREADY THERE){
-// 		DONT DO SHIT
-// 		PRINT ERROR MESSAGE
-// 	}
-// 	strcpy(ClientSubscribedChannels, ChannelID);
-// }
+// char ParseMessage (char WhatWasEntered){
+
+// 	char OriginalInput = WhatWasEntered;
+// 	char SplitCharacter = " ";
+	
+// 	char WhatMethod = strtok(WhatWasEntered, SplitCharacter);
+
+// 	printf(WhatMethod);
 
 
 // }
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
+	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
 	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
 	printf("sent !\n");
 	printf("TestClient: %ld\n",strlen(EnteredText));
@@ -39,13 +40,28 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 void ifstatment(char buffer) {
 
 }
+
+// int StringSplit(char InputText){
+// 	char token = strtok(InputText, " ");
+
 // 	while (token != NULL){
 // 		printf("%s\n", token);
 // 		token = strtok(NULL, " ");
 // 	}
 // }
 
-void func(int sockfd) 
+int nextMessage(int currentMsgID, char ClientSideMessageStorage[1000][1024])
+{
+	currentMsgID = currentMsgID+1;
+	// TEST print current messageID
+	printf("NEXT MESSAGE ID: %d\n", currentMsgID);
+	// Print next message
+	printf("PROCESSING NEXT CHANNEL: %s\n", ClientSideMessageStorage[currentMsgID]);
+	return currentMsgID;
+} 
+
+
+void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentMsgID) 
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
     int n; 
@@ -64,6 +80,12 @@ void func(int sockfd)
 		}
         printf("-----> %s \n", clientBuffer);
 
+
+		
+        // }
+		// else if(strncmp("next ", clientBuffer, 5) == 0){
+		// 	printf("PROCESS NEXT CHANNEL BY ID \n");
+		// }
 		//client BYE termination
 		if(strncmp(buff, "bye", 3) == 0){
 			printf("Client Exit...\n"); 
@@ -82,15 +104,23 @@ void func(int sockfd)
 
 char client_response[256];
 
+
 int main(int argc, char *argv[]) {
+
+	int ChosenPort = DEFAULTPORT;
+    if(argc == 3){
+    ChosenPort = atoi(argv[2]);
+    }
 	//create socket
 	int network_socket;
 	network_socket = socket(AF_INET, SOCK_STREAM,0);
 
+	// StringSplit("This is a test string");
+
 	//specify an address for the socket
 	struct sockaddr_in server_address;
 	server_address.sin_family = AF_INET;
-	server_address.sin_port = htons(DEFAULTPORT);
+	server_address.sin_port = htons(ChosenPort);
 	server_address.sin_addr.s_addr = INADDR_ANY;
 
 	int connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
@@ -100,33 +130,43 @@ int main(int argc, char *argv[]) {
 		exit(0);
 	}
 
+
+	//Send testing message
+	//SendMessage(network_socket, "next CHANNELID");
+	
+
 	//recieve data from server
 	char server_response[256];
 	recv(network_socket, &server_response, sizeof(server_response),0);
 	int LoopLimit = 3;
+	// for (int i = 0; i < LoopLimit; i++){
+	// 	ClientSideSampleArray[i] = server_response;
+	// 	printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[i]);
+	// }
+
 
 	//print the server response
 	printf("The server said %s\n", server_response);
 	char buffer[256];
 	int n;
 
-char ClientSideMessageStorage[1000][1024];
-char ClientSubscribedChannels[256][3];
-int Counter = 0;
+
+	int currentMsgID = 0;
+	char ClientSideMessageStorage[1000][1024];
+	int Counter = 0;
 
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
-		func(network_socket);
+		func(network_socket);//, ClientSideMessageStorage, currentMsgID);
 		n = read(network_socket,buffer,256);
-		printf("%s IS THE BUFFER", buffer);
+		printf("%s IS THE BUFFER\n", buffer);
+
+		// If user input is NEXT 
+		if (strncmp("NEXT", buffer, 4) ==0){
+			currentMsgID = nextMessage(currentMsgID, ClientSideMessageStorage);
+		}
 
 		strcpy(ClientSideMessageStorage[Counter], buffer);
-	
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[0]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[1]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[2]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[3]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[4]);
 
 		Counter = Counter+1;
 		printf("COunter -->> %d\n", Counter);
