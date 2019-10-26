@@ -117,17 +117,25 @@ int main(int argc, char *argv[]) {
 	printf("The server said %s\n", server_response);
 	char buffer[256];
 	int n;
-	char buffermessage[1000];
-	int tempcounter = 1; 
+
+
+
+
+
+
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);
 		n = read(network_socket,buffer,256);
 		printf("%s", buffer);
-		if (n != NULL) {
-			tempcounter += 1;
-		}
-		bzero(buffer,256);4
+		//Mem Allocation meloc Buffer Message Server Message
+		// char *a = (char *)malloc(sizeof(char) * n);
+		// if (a == NULL) {
+		// 	printf("memory allocation failed\n");
+		// 	return EXIT_FAILURE;
+    	// }
+
+		bzero(buffer,256);
 	}
 
 	//close connection
