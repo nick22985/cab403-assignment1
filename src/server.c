@@ -26,8 +26,8 @@ void error(const char *msg){
 void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
 	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
-	printf("sent !\n");
-	printf("TestServer: %ld\n",strlen(EnteredText));
+	//printf("sent !\n");
+	//printf("TestServer: %ld\n",strlen(EnteredText));
 }
 
 int SelectPort(int EnteredPort) {
@@ -45,10 +45,11 @@ int SelectPort(int EnteredPort) {
 int main(int argc, char *argv[]){
 typedef struct theVault theVault ;
 struct TheVault {
+    int messageID;
     int channelID;
     int time;
     char message;
-    }
+    };
 
 
     char server_message[256] = "You have reached the server. Yes cunt.\n";
@@ -133,8 +134,8 @@ struct TheVault {
 
                 // }
                     else {
-                        printf("DID NOT HIT %s\n",buffer);
-                        printf("length of buffer is: %ld\n", strlen(buffer)); 
+                        printf("NOT RECOGNISED COMMAND\n");
+                        //printf("length of buffer is: %ld\n", strlen(buffer)); 
                         SendMessage(client_socket, buffer);
                         //Prints time of message sending
                         gettimeofday(&end, NULL);

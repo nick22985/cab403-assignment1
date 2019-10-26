@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 client
 server
+src/client
+src/client

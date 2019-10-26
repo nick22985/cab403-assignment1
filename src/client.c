@@ -74,13 +74,6 @@ void func(int sockfd)
     } 
 } 
 
-
-
-
-
-
-
-
 char client_response[256];
 
 int main(int argc, char *argv[]) {
@@ -97,7 +90,8 @@ int main(int argc, char *argv[]) {
 	int connection_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
 	//connection error checking
 	if (connection_status != 0){
-		printf("CONNECTION ERROR");
+		printf("CONNECTION ERROR\n");
+		exit(0);
 	}
 
 
