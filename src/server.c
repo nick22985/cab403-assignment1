@@ -18,7 +18,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#define SHARED_OBJECT_PATH NULL 
+#define SHARED_OBJECT_PATH         "/messenger"
 #define DEFAULTPORT 12345
 #define server_buff 256
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]){
 		perror("In shm_open()");
 		exit(1);
 	}
-	fprintf(stderr, "Created shared memory object %s\n", SHARED_OBJECT_PATH);
+	fprintf(stderr, "Created shared memory object %p\n", SHARED_OBJECT_PATH);
 
 	/* Adjust mapped file size (make room for the whole segment to map) using ftruncate(). */
 	ftruncate(fd, shared_seg_size);
