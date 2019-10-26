@@ -148,12 +148,6 @@ int Counter = 0;
 		printf("%s IS THE BUFFER", buffer);
 
 		strcpy(ClientSideMessageStorage[Counter], buffer);
-	
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[0]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[1]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[2]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[3]);
-		printf("Please work, you bastard ---> %s\n", ClientSideMessageStorage[4]);
 
 		Counter = Counter+1;
 		printf("COunter -->> %d\n", Counter);
