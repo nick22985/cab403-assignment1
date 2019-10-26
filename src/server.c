@@ -194,6 +194,7 @@ int main(int argc, char *argv[]){
                         long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
                         printf("Time elpased is %ld seconds and %ld micros\n", seconds, micros);
                         //clear the buffer for use again
+<<<<<<< HEAD
                         // char temp1format;
                         // char temp2format;
                         // temp1format = strcat("|", buffer); 
@@ -201,6 +202,15 @@ int main(int argc, char *argv[]){
                         // temp1format = strcat("|", temp2format); 
                         // temp2format = strcat(temp1format, "|"); 
                         // printf("%d", temp1format);
+=======
+                        char temp1format;
+                        char temp2format;
+                        temp1format = strcat("|", buffer); 
+                        temp2format = strcat(temp1format, "|"); 
+                        temp1format = strcat("|", temp2format); 
+                        // temp2format = strcat(temp1format, "|"); 
+                        printf("%d", temp1format);
+>>>>>>> e2be63baf0f26827695cb5cc0f913146fcf472b0
                         SendMessage(client_socket, buffer);
                         bzero(buffer,sizeof(buffer));
 
