@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
 	char buffer[256];
 	int n;
 	char buffermessage[1000];
-	int tempcounter += 1; 
+	int tempcounter = 1; 
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);
