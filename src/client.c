@@ -117,12 +117,17 @@ int main(int argc, char *argv[]) {
 	printf("The server said %s\n", server_response);
 	char buffer[256];
 	int n;
+	char buffermessage[1000];
+	int tempcounter += 1; 
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);
 		n = read(network_socket,buffer,256);
 		printf("%s", buffer);
-		bzero(buffer,256);
+		if (n != NULL) {
+			tempcounter += 1;
+		}
+		bzero(buffer,256);4
 	}
 
 	//close connection
