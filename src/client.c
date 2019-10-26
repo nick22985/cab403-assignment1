@@ -17,21 +17,20 @@
 
 #define CLIENTBUFF 256
 
+//A set of skeleton methods, partially complete and indicating intended function
 
-// char ParseMessage (char WhatWasEntered){
-
-// 	char OriginalInput = WhatWasEntered;
-// 	char SplitCharacter = " ";
-	
-// 	char WhatMethod = strtok(WhatWasEntered, SplitCharacter);
-
-// 	printf(WhatMethod);
+// void SUB(int ChannelID){
+// 	if(ChannelID IS NOT ALREADY THERE){
+// 		DONT DO SHIT
+// 		PRINT ERROR MESSAGE
+// 	}
+// 	strcpy(ClientSubscribedChannels, ChannelID);
+// }
 
 
 // }
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
-	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
 	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
 	printf("sent !\n");
 	printf("TestClient: %ld\n",strlen(EnteredText));
@@ -40,10 +39,6 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 void ifstatment(char buffer) {
 
 }
-
-// int StringSplit(char InputText){
-// 	char token = strtok(InputText, " ");
-
 // 	while (token != NULL){
 // 		printf("%s\n", token);
 // 		token = strtok(NULL, " ");
@@ -69,14 +64,6 @@ void func(int sockfd)
 		}
         printf("-----> %s \n", clientBuffer);
 
-
-		//next channel
-        // if (strcmp("next", clientBuffer) == 0) {
-        //     printf("PROCESS NEXT CHANNEL \n");
-        // }
-		// else if(strncmp("next ", clientBuffer, 5) == 0){
-		// 	printf("PROCESS NEXT CHANNEL BY ID \n");
-		// }
 		//client BYE termination
 		if(strncmp(buff, "bye", 3) == 0){
 			printf("Client Exit...\n"); 
@@ -95,13 +82,10 @@ void func(int sockfd)
 
 char client_response[256];
 
-
 int main(int argc, char *argv[]) {
 	//create socket
 	int network_socket;
 	network_socket = socket(AF_INET, SOCK_STREAM,0);
-
-	// StringSplit("This is a test string");
 
 	//specify an address for the socket
 	struct sockaddr_in server_address;
@@ -116,29 +100,18 @@ int main(int argc, char *argv[]) {
 		exit(0);
 	}
 
-
-	//Send testing message
-	//SendMessage(network_socket, "next CHANNELID");
-	
-
 	//recieve data from server
 	char server_response[256];
 	recv(network_socket, &server_response, sizeof(server_response),0);
 	int LoopLimit = 3;
-	// for (int i = 0; i < LoopLimit; i++){
-	// 	ClientSideSampleArray[i] = server_response;
-	// 	printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[i]);
-	// }
-
 
 	//print the server response
 	printf("The server said %s\n", server_response);
 	char buffer[256];
 	int n;
 
-
-
 char ClientSideMessageStorage[1000][1024];
+char ClientSubscribedChannels[256][3];
 int Counter = 0;
 
 	while(1){

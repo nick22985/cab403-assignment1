@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
         char message;
         }thevaultpacket_t;
 
-    char server_message[256] = "You have reached the server. Yes cunt.\n";
+    char server_message[256] = "Welcome! Your client ID is %d\n";
 
     //start clock
     time_t Server_Starttime = time(NULL);
