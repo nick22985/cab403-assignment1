@@ -65,12 +65,12 @@ char ParseMessage (char *WhatWasEntered){
 
 int main(int argc, char *argv[]){
     int fd;
-    typedef struct thevault {
+    typedef struct thevaultpacket {
         int messageID;
         int channelID;
         int time;
         char message;
-        }thevaultpacket;
+        }thevaultpacket_t;
 
     char server_message[256] = "You have reached the server. Yes cunt.\n";
 
@@ -80,6 +80,27 @@ int main(int argc, char *argv[]){
     gettimeofday(&start, NULL);
 
     //MEMORY
+	int shared_seg_size = (sizeof(thevaultpacket_t));   /* We want a shared segment capable of storing one message */
+	thevaultpacket_t* shared_msg;      /* the shared segment, and head of the messages list */
+
+	/* Create the shared memory object using shm_open(). On Linux, by default it is created inside of /dev/shm. */
+	fd = shm_open(SHARED_OBJECT_PATH, O_CREAT | O_EXCL | O_RDWR, S_IRWXU | S_IRWXG);
+    
+	if (fd < 0) {
+		perror("In shm_open()");
+		exit(1);
+	}
+	fprintf(stderr, "Created shared memory object %s\n", SHARED_OBJECT_PATH);
+
+	/* Adjust mapped file size (make room for the whole segment to map) using ftruncate(). */
+	ftruncate(fd, shared_seg_size);
+
+	/* Request the shared segment using mmap(). */    
+	shared_msg = (msg_packet_t*)mmap(NULL, shared_seg_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	if (shared_msg == NULL) {
+		perror("In mmap()");
+		exit(1);
+	}
 
 	//Int to refer to Buffer by
 	int n;
