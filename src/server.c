@@ -43,6 +43,14 @@ int SelectPort(int EnteredPort) {
 
 
 int main(int argc, char *argv[]){
+typedef struct theVault theVault ;
+struct TheVault {
+    int channelID;
+    int time;
+    char message;
+    }
+
+
     char server_message[256] = "You have reached the server. Yes cunt.\n";
 
     //start clock
