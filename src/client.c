@@ -45,10 +45,14 @@ int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3])
 	
 	temp = FindNumbers(message, buffer, msgIDRW);
 	printf("UNSUB from -->%d\n", temp); 
+	// if channel id valid
 	if (temp <= 255 && temp >= 0){
+		// search subChannel for SUB of channelID
 		for (int i=0;i<CLIENTBUFF; i++){
-			if (subChannelID[i] != temp){
-				//printf("Subscribed to channel !!TEST-->> %d\n", temp);
+			// if SUB of channelID found, remove it
+			if (subChannelID[i] == temp){
+				
+
 			}
 		}
 	}
@@ -62,9 +66,7 @@ int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 	int temp;
 	char message[1024];
 	msgIDRW[2] = 3;
-	if (strlen(buffer)){
-		
-	}
+	
 	temp = FindNumbers(message, buffer, msgIDRW);
 	if (temp <= 255 && temp >= 0){
 		for (int i=0;i<CLIENTBUFF; i++){
@@ -82,10 +84,14 @@ int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 					}
 				
 			}
-			else {
+			else if (subChannelID[i] == temp){
 				printf("Already subscribed to channel %d\n", temp);
 				return 0;
+			} else {
+				//printf("Invalid channel: %d\n", temp);
+				return 0;
 			}
+
 		}
 	} else if (temp < 0 || temp > 255){
 		//printf("Invalid channel: %d\n", temp);
@@ -172,6 +178,7 @@ int FindNumbers(char message[1024], char buffer[CLIENTBUFF], int msgIDRW[3]){
 
 				//printf("Current channelID is: --> %d\n", channelID);
 			}
+		
 			//printf("----> %s\n", message);
 		}
 		
@@ -185,12 +192,17 @@ int FindNumbers(char message[1024], char buffer[CLIENTBUFF], int msgIDRW[3]){
 				channelID = channelID*10 + tempNum;
 				//printf("Current channelID is: --> %d\n", channelID);
 			}
+			
 			//printf("----> %s\n", message);
 		}
 		channelID = channelID * -1;
 		//printf("Number is negative %d\n", channelID);
 		
-	} 
+	} else {
+		//printf("Invalid channel: %d\n", channelID);
+		channelID = channelID * -1;
+		return channelID;
+	}
 
 	//printf("Channel is: %d\n", channelID);
 	if(channelID >= 0 && channelID <= 9){
@@ -368,15 +380,27 @@ int main(int argc, char *argv[]) {
 		//printf("%s IS THE BUFFER\n", buffer);
 		if (strncmp("SUB", buffer, 3) ==0){
 			printf("Recognised SUB - Detecting ChannelID\n");
-			SUB(buffer, subChannelID, msgIDRW);
+			if (strlen(buffer) > 4){
+				printf("CORRECT\n");
+				SUB(buffer, subChannelID, msgIDRW);
+			
+			} else {
+				printf("Invalid channel");
+			}
+			
 		}
 		else if (strncmp("CHANNELS", buffer, 8) ==0){
 			printf("Recognised CHANNELS\n");
 			CHANNELS();
 		}		
 		else if (strncmp("UNSUB", buffer, 5) ==0){
-			printf("Recognised UNSUB - Detecting ChannelID\n");
-			UNSUB(buffer,subChannelID, msgIDRW);
+			if (strlen(buffer) > 6){
+				printf("CORRECT\n");
+				printf("Recognised UNSUB - Detecting ChannelID\n");
+				UNSUB(buffer,subChannelID, msgIDRW);
+			} else {
+				printf("Invalid channel");
+			}
 		}
 		else if (strncmp("LIVEFEED", buffer, 8) ==0){
 			printf("Recognised LIVEFEED - Detecting ChannelID\n");
@@ -384,8 +408,11 @@ int main(int argc, char *argv[]) {
 		// If user input is NEXT 
 		else if (strncmp("NEXT", buffer, 4) ==0){
 			//printf("CurrentMsgIDWrite: %d\n", msgIDRW[0]);// currentMsgIDRead);
-			NEXT(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead);
-			
+			if (strlen(buffer) > 4){
+				NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
+			} else {
+				NEXT(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead);
+			}
 		} else if(strncmp("SEND", buffer, 4) ==0){
 			totalChannelMessageCount = totalChannelMessageCount+1;
 			printf("CurrentMsgIDWrite: %d\n", msgIDRW[1]);// currentMsgIDWrite);
@@ -402,13 +429,15 @@ int main(int argc, char *argv[]) {
 			SendMessage(network_socket, "keep_alive");
 			keep_alive = 0;
 		}
-		else if (strncmp("NEXR ", buffer, 5) ==0){
-			NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
-		}
+		// else if (strncmp("NEXR ", buffer, 5) ==0){
+		// 	NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
+		// }
 		else{
 			printf("Invalid Input\n");
 		}
+		//printf("%s",buffer);
 		bzero(buffer,256);
+		//printf("test");
 	}
 
 	//close connection
