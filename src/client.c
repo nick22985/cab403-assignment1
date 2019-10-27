@@ -71,19 +71,13 @@ int NEXT(int currentMsgIDRead, char ClientSideMessageStorage[1000][1024])
 
 } 
 
-
-
-int SEND(int currentMsgIDWrite, int SubChannelID[256], char ClientSideMessageStorage[1000][1024], int ClientSideMessageChannelID[1000][1], char buffer[256]){
+// Find and return first set of numbers as type int
+int FindNumbers(char message[1024]){
 	int channelID=0, j,tempNum;
-	char message[1024], tempStr;
-	for(int i = 0; i < strlen(buffer)-4; i++){
-		message[i] = buffer[5 + i];
-		//printf("--> %s\n", message);
-	}
-	//printf("--> %s\n", message);
-	int counter = 0;
-
-	for(j=0;j<5;j++){
+	char tempStr;
+	
+	
+	for(j=0;j<3;j++){
 		tempStr = message[j];
 		if(tempStr >= '0' && tempStr <= '9'){
 			//printf("Current tempStr: %d\n", tempStr);
@@ -94,6 +88,21 @@ int SEND(int currentMsgIDWrite, int SubChannelID[256], char ClientSideMessageSto
 		}
 		//printf("----> %s\n", message);
 	}
+	return channelID;
+}
+
+int SEND(int currentMsgIDWrite, int SubChannelID[256], char ClientSideMessageStorage[1000][1024], int ClientSideMessageChannelID[1000][1], char buffer[256]){
+	
+	char message[1024];
+	for(int i = 0; i < strlen(buffer)-4; i++){
+		message[i] = buffer[5 + i];
+		//printf("--> %s\n", message);
+	}
+	//printf("--> %s\n", message);
+	
+	int channelID;
+	channelID = FindNumbers(message);
+	
 	ClientSideMessageChannelID[currentMsgIDWrite][0] = channelID;
 	printf("Channel is: %d\n", ClientSideMessageChannelID[currentMsgIDWrite][0]);
 	if(channelID >= 0 && channelID <= 9){
@@ -209,7 +218,7 @@ int main(int argc, char *argv[]) {
 
 	int currentMsgIDRead, currentMsgIDWrite;
 	char ClientSideMessageStorage[1000][1024];
-	int ClientSideMessageChannelID[1000][3];
+	int ClientSideMessageChannelID[1000][1];
 	int Counter = 0;
 
 	while(1){
