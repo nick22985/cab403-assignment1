@@ -184,6 +184,8 @@ void SEND(int msgIDRW[3], char ClientSideMessageStorage[1000][1024], int ClientS
 	
 }
 
+void CHANNELS();
+
 void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentMsgID) 
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
@@ -276,11 +278,32 @@ int main(int argc, char *argv[]) {
 	int ClientSideMessageChannelID[1000][1];
 	int Counter = 0;
 
+	regex_t regex;
+	int reti;
+
+
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);//, ClientSideMessageStorage, currentMsgID);
 		n = read(network_socket,buffer,256);
 		//printf("%s IS THE BUFFER\n", buffer);
+		if (strncmp("SUB", buffer, 3) ==0){
+			printf("Recognised SUB - Detecting ChannelID\n");
+		}
+		else if (strncmp("CHANNELS", buffer, 8) ==0){
+			printf("Recognised CHANNELS\n");
+		}		
+		else if (strncmp("UNSUB", buffer, 5) ==0){
+			printf("Recognised UNSUB - Detecting ChannelID\n");
+		}
+		else if (strncmp("LIVEFEED", buffer, 8) ==0){
+			printf("Recognised LIVEFEED - Detecting ChannelID\n");
+		}
+		else if (strncmp("BYE", buffer, 3) ==0){
+			printf("Recognised BYE\n");
+			printf("Client Exit...\n"); 
+			exit(0); 
+		}
 
 		// If user input is NEXT 
 		if (strncmp("NEXT", buffer, 4) ==0){
@@ -299,7 +322,9 @@ int main(int argc, char *argv[]) {
 
 		}
 		
-
+		else{
+			printf("Invalid Input");
+		}
 		bzero(buffer,256);
 	}
 
