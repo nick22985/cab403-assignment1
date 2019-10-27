@@ -174,11 +174,11 @@ int main(int argc, char *argv[]){
                     printf("SEND Here\n");
                     //Function for server to run when next is run.
                 }
-                else if ( strcmp("CHANNELS", buffer) == 0){
-                    printf("CHANNELS .........");
-                    //Function for server to when next is run
+                // else if ( strcmp("CHANNELS", buffer) == 0){
+                //     printf("CHANNELS .........");
+                //     //Function for server to when next is run
 
-                }
+                // }
                 //     else if ( strncmp("BYE", buffer, 3) == 0) {
                 //     printf("BYE Here\n");
                 //     //Function for server to run when next is run.
@@ -210,9 +210,9 @@ int main(int argc, char *argv[]){
                         // temp1format = strcat("|", temp2format); 
                         // // temp2format = strcat(temp1format, "|"); 
                         // printf("%d", temp1format);
-                        char temp = "|";
-                        sprintf(temp,buffer,"|");
-                        printf("%s", temp);
+                        // char temp = "|";
+                        // sprintf(temp,buffer,"|");
+                        // printf("%s", temp);
                         SendMessage(client_socket, buffer);
                         //clear the buffer for use again
                         bzero(buffer,sizeof(buffer));
