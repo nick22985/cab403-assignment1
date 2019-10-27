@@ -203,13 +203,16 @@ int main(int argc, char *argv[]){
                         // temp1format = strcat("|", temp2format); 
                         // temp2format = strcat(temp1format, "|"); 
                         // printf("%d", temp1format);
-                        char temp1format;
-                        char temp2format;
-                        temp1format = strcat("|", buffer); 
-                        temp2format = strcat(temp1format, "|"); 
-                        temp1format = strcat("|", temp2format); 
+                        // char temp1format;
+                        // char temp2format;
+                        // temp1format = strcat("|", buffer); 
                         // temp2format = strcat(temp1format, "|"); 
-                        printf("%d", temp1format);
+                        // temp1format = strcat("|", temp2format); 
+                        // // temp2format = strcat(temp1format, "|"); 
+                        // printf("%d", temp1format);
+                        char temp = "|";
+                        sprintf(temp,buffer,"|");
+                        printf("%s", temp);
                         SendMessage(client_socket, buffer);
                         //clear the buffer for use again
                         bzero(buffer,sizeof(buffer));
