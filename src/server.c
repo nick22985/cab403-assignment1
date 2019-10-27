@@ -45,23 +45,6 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-// char ParseMessage (char *WhatWasEntered){
-
-// 	char OriginalInput = WhatWasEntered;
-// 	char * OutPutString;
-
-//     printf("PARSING STRING --> %s\n",WhatWasEntered);
-
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("METHOD TO CALL --> %s\n", OutPutString);
-
-//     OutPutString = strtok(OutPutString, " ");
-// 	printf("CHANNEL ID --> %s\n", OutPutString);
-
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
-
-// }
 
 int main(int argc, char *argv[]){
     int fd;
@@ -79,31 +62,7 @@ int main(int argc, char *argv[]){
     struct timeval start, end;
     gettimeofday(&start, NULL);
 
-    //MEMORY
-
-    // if (shm_unlink(SHARED_OBJECT_PATH) != 0) {
-	// 	perror("In shm_unlink()");
-	// 	exit(1);
-	// }
-	// int shared_seg_size = (sizeof(thevaultpacket_t));   /* We want a shared segment capable of storing one message */
-	// thevaultpacket_t* shared_msg;      /* the shared segment, and head of the messages list */
-
-	// fd = shm_open(SHARED_OBJECT_PATH, O_CREAT | O_EXCL | O_RDWR, S_IRWXU | S_IRWXG);
-    
-	// if (fd < 0) {
-	// 	perror("In shm_open()");
-	// 	exit(1);
-	// }
-	// fprintf(stderr, "Created shared memory object %p\n", SHARED_OBJECT_PATH);
-
-    // ftruncate(fd, shared_seg_size);
-    // //messageBank *messageBankPtr = mmap(NULL, sizeof(messageBank), PROT_WRITE | PROT_READ, MAP_SHARED| MAP_ANONYMOUS, -1, 0);
-    // shared_msg = (thevaultpacket_t*)mmap(NULL, shared_seg_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-	// if (shared_msg == NULL) {
-	// 	perror("In mmap()");
-	// 	exit(1);
-	// }
-    // char * SampleArray[10];
+ 
 
 	//Int to refer to Buffer by
 	int n;
@@ -143,76 +102,13 @@ int main(int argc, char *argv[]){
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
-                //SampleArray[0] = buffer;
-                //printf("SampleArray position 0 is --> %s\n", SampleArray[0]);
-                //printf("%d\n", strcmp("next", buffer));
-                // if ( strcmp("next", buffer) == 0) {
-                //     printf("Test Function Here\n");
-                //     //Function for server to run when next is run.
-                // }
-                if ( strcmp("next CHANNELID", buffer) == 0) {
-                    printf("NEXT CHANNELID Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("sub CHANNELID", buffer) == 0) {
-                    printf("SUB function Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("unsub CHANNELID", buffer) == 0) {
-                    printf("UNSUB function Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("livefeed CHANNELID", buffer) == 0) {
-                    printf("LIVEFEED CHANNELID Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("livefeed", buffer) == 0) {
-                    printf("LIVEFEED Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("SEND CHANNELID MESSAGE", buffer) == 0) {
-                    printf("SEND Here\n");
-                    //Function for server to run when next is run.
-                }
-                // else if ( strcmp("CHANNELS", buffer) == 0){
-                //     printf("CHANNELS .........");
-                //     //Function for server to when next is run
 
-                // }
-                //     else if ( strncmp("BYE", buffer, 3) == 0) {
-                //     printf("BYE Here\n");
-                //     //Function for server to run when next is run.
-
-                // }
-                    else {
-                        printf("NOT RECOGNISED COMMAND\n");
-                        //printf("length of buffer is: %ld\n", strlen(buffer)); 
-                        
-                        //Prints time of message sending
+                       //Prints time of message sending
                         gettimeofday(&end, NULL);
                         long seconds = (end.tv_sec - start.tv_sec);
                         long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
                         printf("Time elpased is %ld seconds and %ld micros\n", seconds, micros);
-                        
-                        //Formating lines to send to client
-                        //clear the buffer for use again
-                        // char temp1format;
-                        // char temp2format;
-                        // temp1format = strcat("|", buffer); 
-                        // temp2format = strcat(temp1format, "|"); 
-                        // temp1format = strcat("|", temp2format); 
-                        // temp2format = strcat(temp1format, "|"); 
-                        // printf("%d", temp1format);
-                        // char temp1format;
-                        // char temp2format;
-                        // temp1format = strcat("|", buffer); 
-                        // temp2format = strcat(temp1format, "|"); 
-                        // temp1format = strcat("|", temp2format); 
-                        // // temp2format = strcat(temp1format, "|"); 
-                        // printf("%d", temp1format);
-                        // char temp = "|";
-                        // sprintf(temp,buffer,"|");
-                        // printf("%s", temp);
+
                         SendMessage(client_socket, buffer);
                         //clear the buffer for use again
                         bzero(buffer,sizeof(buffer));
@@ -220,12 +116,8 @@ int main(int argc, char *argv[]){
                     }
             }
         }
-	}
+	
 
-    if (shm_unlink(SHARED_OBJECT_PATH) != 0) {
-		perror("In shm_unlink()");
-		exit(1);
-	}
 
 	//close socket
     close(server_socket);

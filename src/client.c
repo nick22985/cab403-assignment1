@@ -14,23 +14,9 @@
 #include <regex.h>
 
 #define DEFAULTPORT 12345
-
-
 #define CLIENTBUFF 256
 #define ERRORNUM 300
 
-
-// char ParseMessage (char WhatWasEntered){
-
-// 	char OriginalInput = WhatWasEntered;
-// 	char SplitCharacter = " ";
-	
-// 	char WhatMethod = strtok(WhatWasEntered, SplitCharacter);
-
-// 	printf(WhatMethod);
-
-
-// }
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
@@ -43,14 +29,6 @@ void ifstatment(char buffer) {
 
 }
 
-// int StringSplit(char InputText){
-// 	char token = strtok(InputText, " ");
-
-// 	while (token != NULL){
-// 		printf("%s\n", token);
-// 		token = strtok(NULL, " ");
-// 	}
-// }
 int FindNumbers(char message[1024]);
 
 void SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF]){
@@ -174,7 +152,6 @@ int SEND(int currentMsgIDWrite, char ClientSideMessageStorage[1000][1024], int C
 	return currentMsgIDWrite;
 }
 
-void CHANNELS();
 
 void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentMsgID) 
 { 
@@ -196,16 +173,6 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
         //printf("-----> %s \n", clientBuffer);
 
 
-		
-        // }
-		// else if(strncmp("next ", clientBuffer, 5) == 0){
-		// 	printf("PROCESS NEXT CHANNEL BY ID \n");
-		// }
-		//client BYE termination
-		if(strncmp(buff, "bye", 3) == 0){
-			printf("Client Exit...\n"); 
-			exit(0); 
-		}
         else {
             //send message to server
             SendMessage(sockfd, clientBuffer);
@@ -218,6 +185,34 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 } 
 
 char client_response[256];
+
+int subChannelID[256];
+int totalChannelMessageCount;//need a way to know how many messages have been sent to X channel since server start
+int totalReadMessages;//messages from this channel that have been read
+int totalMessagesInBufferForChannel;//messages that are in buffer for this channel NOT read
+int SubbedChannelCount;//count of currently subscribed channels
+
+
+void CHANNELS(){
+	//arrange channels in ascending order by ID
+	for (int i = 0; i < SubbedChannelCount; i++){
+		for (int u = 0; u < SubbedChannelCount; u++){
+			if(subChannelID[i] > subChannelID[u]){
+				int temp = subChannelID[i];
+				subChannelID[i] = subChannelID[u];
+				subChannelID[u] = temp;
+			}
+		}
+	}
+
+
+	for(int i = 0; i < SubbedChannelCount; i++){
+
+		printf("%ls	%d	%d	%d", subChannelID, totalChannelMessageCount, totalReadMessages, totalMessagesInBufferForChannel);
+	}
+
+	
+}
 
 
 int main(int argc, char *argv[]) {
@@ -258,18 +253,13 @@ int main(int argc, char *argv[]) {
 	//print the server response
 	printf("The server said %s\n", server_response);
 	char buffer[256];
-	int subChannelID[256];
-	int n, temp;
 
+	int n, temp;
 
 	int currentMsgIDRead, currentMsgIDWrite;
 	char ClientSideMessageStorage[1000][1024];
 	int ClientSideMessageChannelID[1000][1];
 	int Counter = 0;
-
-	regex_t regex;
-	int reti;
-
 
 	while(1){
 		//CODE WHILE CONNECTED GOeS HERE
@@ -287,10 +277,15 @@ int main(int argc, char *argv[]) {
 		}
 		else if (strncmp("LIVEFEED", buffer, 8) ==0){
 			printf("Recognised LIVEFEED - Detecting ChannelID\n");
+			while(1){
+				//any time a message arrives, call next on it immediately after storing it
+			}
+
 		}
 		else if (strncmp("BYE", buffer, 3) ==0){
 			printf("Recognised BYE\n");
-			printf("Client Exit...\n"); 
+			printf("Client Exit...\n");
+			//Clear all buffers here
 			exit(0); 
 		}
 
