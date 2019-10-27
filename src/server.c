@@ -137,18 +137,18 @@ int main(int argc, char *argv[]){
                 printf("exit server\n");
                 keep_alive = 0;
             }
-                else {
-                    printf("NOT RECOGNISED COMMAND\n");
-                    //printf("length of buffer is: %ld\n", strlen(buffer)); 
-                    //Prints time of message sending
-                    gettimeofday(&end, NULL);
-                    long seconds = (end.tv_sec - start.tv_sec);
-                    long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
-                    printf("Time elpased is %ld seconds and %ld micros\n", seconds, micros);
-                    SendMessage(client_socket, buffer);
-                    //clear the buffer for use again
-                    bzero(buffer,sizeof(buffer));
-                }
+            else {
+                printf("NOT RECOGNISED COMMAND\n");
+                //printf("length of buffer is: %ld\n", strlen(buffer)); 
+                //Prints time of message sending
+                gettimeofday(&end, NULL);
+                long seconds = (end.tv_sec - start.tv_sec);
+                long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+                printf("Time elpased is %ld seconds and %ld micros\n", seconds, micros);
+                SendMessage(client_socket, buffer);
+                //clear the buffer for use again
+                bzero(buffer,sizeof(buffer));
+            }
         }
 	}
 
