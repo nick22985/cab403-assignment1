@@ -18,19 +18,9 @@
 
 #define CLIENTBUFF 256
 #define ERRORNUM 300
+int keep_alive;
 
 
-// char ParseMessage (char WhatWasEntered){
-
-// 	char OriginalInput = WhatWasEntered;
-// 	char SplitCharacter = " ";
-	
-// 	char WhatMethod = strtok(WhatWasEntered, SplitCharacter);
-
-// 	printf(WhatMethod);
-
-
-// }
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
@@ -58,7 +48,6 @@ int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 	int temp;
 	char message[1024];
 	msgIDRW[2] = 3;
-	
 	temp = FindNumbers(message, buffer, msgIDRW);
 	for (int i=0;i<CLIENTBUFF; i++){
 		if (subChannelID[i] != temp){
@@ -71,7 +60,7 @@ int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 						subChannelID[j] = temp;
 						printf("Subscribed to channel %d\n", subChannelID[j]);
 						return 1;
-					} 
+					}
 				}
 				//printf("Suscribed to channel %d\n", temp);
 			} else if (temp < 0 || temp > 255){
@@ -129,8 +118,7 @@ int NEXTID(int msgIDRW[3], char buffer[CLIENTBUFF], char ClientSideMessageStorag
 							ClientSideMessageRead[j][0] = 1;
 							return 1;
 							//printf("Test4");
-
-						} 
+						}
 						//printf("Test3");
 					}
 					//printf("Test2");
@@ -140,13 +128,9 @@ int NEXTID(int msgIDRW[3], char buffer[CLIENTBUFF], char ClientSideMessageStorag
 				printf("Not subscribed to channel %d\n", channelID);
 				return 0;
 			}
-			
-		} 
+		}
 		//printf("Test1");
-	} 
-
-
-
+	}
 }
 
 
@@ -256,10 +240,11 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 		for(int u = 0; u < strlen(buff)-1; u++ ){
 			clientBuffer[u] = buff[u];
 		}
-		
 		if(strncmp(buff, "bye", 3) == 0){
+			printf("Recognised BYE\n");
 			printf("Client Exit...\n"); 
-			exit(0); 
+			SendMessage(sockfd, "keep_alive");
+			keep_alive = 0;
 		}
         else {
             //send message to server
@@ -273,7 +258,6 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 } 
 
 char client_response[256];
-
 
 int subChannelID[256];
 int totalChannelMessageCount;//need a way to know how many messages have been sent to X channel since server start
@@ -294,17 +278,15 @@ void CHANNELS(){
 		}
 	}
 
-
 	for(int i = 0; i < SubbedChannelCount; i++){
 		printf("%ls	%d	%d	%d", subChannelID, totalChannelMessageCount, totalReadMessages, totalMessagesInBufferForChannel);
 	}
-
-	
 }
 
-int keep_alive;
+
 
 int main(int argc, char *argv[]) {
+	keep_alive = 1;
 	//create socket
 	int network_socket;
 	network_socket = socket(AF_INET, SOCK_STREAM,0);
@@ -362,7 +344,7 @@ int main(int argc, char *argv[]) {
 	regex_t regex;
 	int reti;
 
-	keep_alive = 1;
+
 	while(keep_alive){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);//, ClientSideMessageStorage, currentMsgID);
@@ -382,10 +364,7 @@ int main(int argc, char *argv[]) {
 			printf("Recognised LIVEFEED - Detecting ChannelID\n");
 		}
 		else if (strncmp("BYE", buffer, 3) ==0){
-			printf("Recognised BYE\n");
-			printf("Client Exit...\n"); 
-			SendMessage(network_socket, "keep_alive");
-			keep_alive = 0;
+
 		}
 		// If user input is NEXT 
 		else if (strncmp("NEXT", buffer, 4) ==0){
