@@ -17,6 +17,7 @@
 
 
 #define CLIENTBUFF 256
+#define ERRORNUM 300
 
 
 // char ParseMessage (char WhatWasEntered){
@@ -50,6 +51,30 @@ void ifstatment(char buffer) {
 // 		token = strtok(NULL, " ");
 // 	}
 // }
+int FindNumbers(char message[1024]);
+
+void SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF]){
+	int temp;
+	char message[1024];
+	for(int i = 0; i < strlen(buffer)-3; i++){
+		message[i] = buffer[4 + i];
+		//printf("--> %s\n", message);
+	}
+	temp = FindNumbers(message);
+	if (temp <= 255 && temp >= 0){
+		for(int j = 0; j < CLIENTBUFF; j++){
+			if (subChannelID[j] == 0){
+				subChannelID[j] = temp;
+				printf("Subscribed to channel %d\n", subChannelID[j]);
+				break;
+			} 
+		}
+		//printf("Suscribed to channel %d\n", temp);
+	} else if (temp < 0 || temp > 255){
+		printf("Invalid channel: %d\n", temp);
+	}
+
+}
 
 int NEXT(int currentMsgIDRead, char ClientSideMessageStorage[1000][1024])
 {
@@ -71,29 +96,57 @@ int NEXT(int currentMsgIDRead, char ClientSideMessageStorage[1000][1024])
 
 } 
 
-
-
-int SEND(int currentMsgIDWrite, int SubChannelID[256], char ClientSideMessageStorage[1000][1024], int ClientSideMessageChannelID[1000][1], char buffer[256]){
+// Find and return first set of numbers as type int
+int FindNumbers(char message[1024]){
 	int channelID=0, j,tempNum;
-	char message[1024], tempStr;
+	char tempStr;
+	
+	if (strncmp(message, "-", 1) != 0){
+		for(j=0;j<3;j++){
+			tempStr = message[j];
+			if(tempStr >= '0' && tempStr <= '9'){
+				//printf("Current tempStr: %d\n", tempStr);
+				tempNum = tempStr - '0';
+				//printf("Current channelID is: --> %d\n", channelID);
+				channelID = channelID*10 + tempNum;
+				//printf("Current channelID is: --> %d\n", channelID);
+			}
+			//printf("----> %s\n", message);
+		}
+		return channelID;
+	} if (strncmp(message, "-", 1) == 0){
+		for(j=0;j<3;j++){
+			tempStr = message[j];
+			if(tempStr >= '0' && tempStr <= '9'){
+				//printf("Current tempStr: %d\n", tempStr);
+				tempNum = tempStr - '0';
+				//printf("Current channelID is: --> %d\n", channelID);
+				channelID = channelID*10 + tempNum;
+				//printf("Current channelID is: --> %d\n", channelID);
+			}
+			//printf("----> %s\n", message);
+		}
+		channelID = channelID * -1;
+		return channelID;
+	} else {
+		printf("Number not valid %d\n", channelID);
+		
+		return channelID;
+	}
+}
+
+int SEND(int currentMsgIDWrite, char ClientSideMessageStorage[1000][1024], int ClientSideMessageChannelID[1000][1], char buffer[256]){
+	
+	char message[1024];
 	for(int i = 0; i < strlen(buffer)-4; i++){
 		message[i] = buffer[5 + i];
 		//printf("--> %s\n", message);
 	}
 	//printf("--> %s\n", message);
-	int counter = 0;
-
-	for(j=0;j<5;j++){
-		tempStr = message[j];
-		if(tempStr >= '0' && tempStr <= '9'){
-			//printf("Current tempStr: %d\n", tempStr);
-			tempNum = tempStr - '0';
-			//printf("Current channelID is: --> %d\n", channelID);
-			channelID = channelID*10 + tempNum;
-			//printf("Current channelID is: --> %d\n", channelID);
-		}
-		//printf("----> %s\n", message);
-	}
+	
+	int channelID;
+	channelID = FindNumbers(message);
+	
 	ClientSideMessageChannelID[currentMsgIDWrite][0] = channelID;
 	printf("Channel is: %d\n", ClientSideMessageChannelID[currentMsgIDWrite][0]);
 	if(channelID >= 0 && channelID <= 9){
@@ -205,8 +258,8 @@ int main(int argc, char *argv[]) {
 	//print the server response
 	printf("The server said %s\n", server_response);
 	char buffer[256];
-	int SubChannelID[256];
-	int n;
+	int subChannelID[256];
+	int n, temp;
 
 
 	int currentMsgIDRead, currentMsgIDWrite;
@@ -248,12 +301,15 @@ int main(int argc, char *argv[]) {
 		} 
 		else if(strncmp("SEND", buffer, 4) ==0){
 			printf("CurrentMsgIDWrite: %d\n", currentMsgIDWrite);
-			currentMsgIDWrite = SEND(currentMsgIDWrite, SubChannelID, ClientSideMessageStorage, ClientSideMessageChannelID, buffer);
+			currentMsgIDWrite = SEND(currentMsgIDWrite, ClientSideMessageStorage, ClientSideMessageChannelID, buffer);
 			printf("New Message Added: %s\n", ClientSideMessageStorage[currentMsgIDWrite-1]);
 			Counter = Counter+1;
 			printf("COunter -->> %d\n", Counter);
 			// strcpy(ClientSideMessageStorage[Counter], buffer);
-		} 
+		} else if(strncmp("SUB", buffer, 3) == 0){
+			SUB(buffer, subChannelID);
+
+		}
 		
 		else{
 			printf("Invalid Input");
