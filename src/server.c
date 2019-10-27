@@ -54,23 +54,6 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-// char ParseMessage (char *WhatWasEntered){
-
-// 	char OriginalInput = WhatWasEntered;
-// 	char * OutPutString;
-
-//     printf("PARSING STRING --> %s\n",WhatWasEntered);
-
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("METHOD TO CALL --> %s\n", OutPutString);
-
-//     OutPutString = strtok(OutPutString, " ");
-// 	printf("CHANNEL ID --> %s\n", OutPutString);
-
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
-
-// }
 
 int main(int argc, char *argv[]){
     int fd;
@@ -88,6 +71,12 @@ int main(int argc, char *argv[]){
     time_t Server_Starttime = time(NULL);
     struct timeval start, end;
     gettimeofday(&start, NULL);
+<<<<<<< HEAD
+=======
+
+ 
+
+>>>>>>> aa726e09f48084b4c56dd385706d88460d99d0ad
 	//Int to refer to Buffer by
 	int n;
     int ChosenPort = DEFAULTPORT;
@@ -124,6 +113,7 @@ int main(int argc, char *argv[]){
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
+<<<<<<< HEAD
                 if ( strcmp("next CHANNELID", buffer) == 0) {
                     printf("NEXT CHANNELID Here\n");
                     //Function for server to run when next is run.
@@ -170,6 +160,24 @@ int main(int argc, char *argv[]){
                     }
                 }
 	    }
+=======
+
+                       //Prints time of message sending
+                        gettimeofday(&end, NULL);
+                        long seconds = (end.tv_sec - start.tv_sec);
+                        long micros = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+                        printf("Time elpased is %ld seconds and %ld micros\n", seconds, micros);
+
+                        SendMessage(client_socket, buffer);
+                        //clear the buffer for use again
+                        bzero(buffer,sizeof(buffer));
+
+                    }
+            }
+        }
+	
+
+>>>>>>> aa726e09f48084b4c56dd385706d88460d99d0ad
 
 	//close socketx
     close(server_socket);
