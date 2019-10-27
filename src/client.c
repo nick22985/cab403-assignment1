@@ -244,25 +244,31 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
     int n; 
-	for (;;) { 
-		bzero(buff, sizeof(buff)); 
+    for (;;) { 
+		//clear buff
+        bzero(buff, sizeof(buff)); 
 		bzero(clientBuffer, sizeof(buff));
 		//start accept user input
-		printf("\nEnter the string : "); 
-		n = 0; 
-		//client input untill an 'enter' is input
-		while ((buff[n++] = getchar()) != '\n');
-		// remove 'enter' from buffer
+        printf("\nEnter the string : "); 
+        n = 0; 
+        while ((buff[n++] = getchar()) != '\n');
 		for(int u = 0; u < strlen(buff)-1; u++ ){
 			clientBuffer[u] = buff[u];
 		}
-		//send message to server
-		SendMessage(sockfd, clientBuffer);
-		bzero(clientBuffer,sizeof(clientBuffer));
-		bzero(buff,sizeof(buff));
-		break;
-	}
-}
+		if(strncmp(buff, "bye", 3) == 0){
+			printf("Client Exit...\n"); 
+			exit(0); 
+		}
+        else {
+            //send message to server
+            SendMessage(sockfd, clientBuffer);
+			bzero(clientBuffer,sizeof(clientBuffer));
+			bzero(buff,sizeof(buff));
+			break;
+        }       
+        break;
+    } 
+} 
 
 char client_response[256];
 
@@ -407,7 +413,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	//close connection
-	// close(network_socket);
+	close(network_socket);
 
 	return 0;
 }
