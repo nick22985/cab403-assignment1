@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
 
     //bind the socket to specified IP and port
     bind (server_socket, (struct sockaddr*) &server_address, sizeof(server_address));
-	while(1){
+	while(keepRunning){
 		//listen for connections
 		listen(server_socket, 10);
     	int client_socket;
