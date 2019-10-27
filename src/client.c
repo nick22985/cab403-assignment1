@@ -256,15 +256,7 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 		for(int u = 0; u < strlen(buff)-1; u++ ){
 			clientBuffer[u] = buff[u];
 		}
-        //printf("-----> %s \n", clientBuffer);
-
-
 		
-        // }
-		// else if(strncmp("next ", clientBuffer, 5) == 0){
-		// 	printf("PROCESS NEXT CHANNEL BY ID \n");
-		// }
-		//client BYE termination
 		if(strncmp(buff, "bye", 3) == 0){
 			printf("Client Exit...\n"); 
 			exit(0); 
