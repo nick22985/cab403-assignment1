@@ -242,36 +242,23 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
     int n; 
-    for (;;) { 
-		//clear buff
-        bzero(buff, sizeof(buff)); 
-		bzero(clientBuffer, sizeof(buff));
-		//start accept user input
-        printf("\nEnter the string : "); 
-        n = 0; 
-		//client input untill an 'enter' is input
-        while ((buff[n++] = getchar()) != '\n');
-		// remove 'enter' from buffer
-		for(int u = 0; u < strlen(buff)-1; u++ ){
-			clientBuffer[u] = buff[u];
-		}
-
-		if(strncmp(buff, "bye", 3) == 0){
-			printf("Recognised BYE\n");
-			printf("Client Exit...\n"); 
-			SendMessage(sockfd, "keep_alive");
-			keep_alive = 0;
-		}
-        else {
-            //send message to server
-            SendMessage(sockfd, clientBuffer);
-			bzero(clientBuffer,sizeof(clientBuffer));
-			bzero(buff,sizeof(buff));
-			break;
-        }       
-        break;
-    } 
-} 
+	bzero(buff, sizeof(buff)); 
+	bzero(clientBuffer, sizeof(buff));
+	//start accept user input
+	printf("\nEnter the string : "); 
+	n = 0; 
+	//client input untill an 'enter' is input
+	while ((buff[n++] = getchar()) != '\n');
+	// remove 'enter' from buffer
+	for(int u = 0; u < strlen(buff)-1; u++ ){
+		clientBuffer[u] = buff[u];
+	}
+	//send message to server
+	SendMessage(sockfd, clientBuffer);
+	bzero(clientBuffer,sizeof(clientBuffer));
+	bzero(buff,sizeof(buff));
+	printf("test ---- \n");
+}
 
 char client_response[256];
 
@@ -357,13 +344,15 @@ int main(int argc, char *argv[]) {
 	printf("--> %d\n", ClientSideMessageChannelID[0][0]);
 	printf("Sub to %d\n", subChannelID[0]);
 	
-int n;
 
 
 	while(keep_alive){
+		int n;
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);//, ClientSideMessageStorage, currentMsgID);
+		printf("test ---- after func");
 		n = read(network_socket,buffer,256);
+
 		//printf("%s IS THE BUFFER\n", buffer);
 		if (strncmp("SUB", buffer, 3) ==0){
 			printf("Recognised SUB - Detecting ChannelID\n");
@@ -396,6 +385,14 @@ int n;
 			printf("COunter -->> %d\n", Counter);
 			// strcpy(ClientSideMessageStorage[Counter], buffer);
 		} 
+		
+		else if(strncmp(buffer, "bye", 3) == 0){
+			printf("Recognised BYE\n");
+			printf("Client Exit...\n"); 
+			SendMessage(network_socket, "keep_alive");
+			keep_alive = 0;
+			printf("test ---- danger \n");
+		}
 		if (strncmp("NEXR ", buffer, 5) ==0){
 			NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
 		}

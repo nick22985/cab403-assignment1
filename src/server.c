@@ -88,27 +88,21 @@ int main(int argc, char *argv[]){
 
     //bind the socket to specified IP and port
     bind (server_socket, (struct sockaddr*) &server_address, sizeof(server_address));
-    
+    while(1) {}
+    listen(server_socket, 10);
+    int client_socket;
+    addr_size = sizeof serverStorage;
+    client_socket = accept(server_socket, (struct sockaddr *) &serverStorage, &addr_size);
 	while(1){
 		//listen for connections
-		listen(server_socket, 10);
-    	int client_socket;
-        addr_size = sizeof serverStorage;
-    	client_socket = accept(server_socket, (struct sockaddr *) &serverStorage, &addr_size);
-        keep_alive = 1;
+        // keep_alive = 1;
         //send message
         send(client_socket, server_message, sizeof(server_message),0);
         bzero(buffer,256);  
         n = read(client_socket,buffer,256);
         if (strlen(buffer) != 0) {
             printf("Client: %s\n",buffer);
-            //SampleArray[0] = buffer;
-            //printf("SampleArray position 0 is --> %s\n", SampleArray[0]);
-            //printf("%d\n", strcmp("next", buffer));
-            // if ( strcmp("next", buffer) == 0) {
-            //     printf("Test Function Here\n");
-            //     //Function for server to run when next is run.
-            // }
+
             if ( strcmp("next CHANNELID", buffer) == 0) {
                 printf("NEXT CHANNELID Here\n");
                 //Function for server to run when next is run.
@@ -135,7 +129,7 @@ int main(int argc, char *argv[]){
             }
             else if (strcmp("keep_alive", buffer) == 0) {
                 printf("exit server\n");
-                keep_alive = 0;
+                // keep_alive = 0;
             }
             else {
                 printf("NOT RECOGNISED COMMAND\n");
