@@ -61,8 +61,8 @@ int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int newSubChann
 							newSubChannelID[t] = subChannelID[t+1];
 						}
 						// subChannelID[j] = subChannelID[j+1];
-						printf("%d is: %d\n", subChannelID[j], j);
-						printf("%d is: %d\n", subChannelID[0], 0);
+						// printf("%d is: %d\n", subChannelID[j], j);
+						// printf("%d is: %d\n", subChannelID[0], 0);
 						bzero(subChannelID, 256);
 						newSubChannelID = subChannelID;
 					}
