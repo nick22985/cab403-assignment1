@@ -60,7 +60,9 @@ int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 	int temp;
 	char message[1024];
 	msgIDRW[2] = 3;
-	
+	if (strlen(buffer)){
+		
+	}
 	temp = FindNumbers(message, buffer, msgIDRW);
 	if (temp <= 255 && temp >= 0){
 		for (int i=0;i<CLIENTBUFF; i++){
