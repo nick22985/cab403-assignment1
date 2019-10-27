@@ -242,22 +242,24 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 { 
     char buff[CLIENTBUFF], clientBuffer[CLIENTBUFF]; 
     int n; 
-	bzero(buff, sizeof(buff)); 
-	bzero(clientBuffer, sizeof(buff));
-	//start accept user input
-	printf("\nEnter the string : "); 
-	n = 0; 
-	//client input untill an 'enter' is input
-	while ((buff[n++] = getchar()) != '\n');
-	// remove 'enter' from buffer
-	for(int u = 0; u < strlen(buff)-1; u++ ){
-		clientBuffer[u] = buff[u];
+	for (;;) { 
+		bzero(buff, sizeof(buff)); 
+		bzero(clientBuffer, sizeof(buff));
+		//start accept user input
+		printf("\nEnter the string : "); 
+		n = 0; 
+		//client input untill an 'enter' is input
+		while ((buff[n++] = getchar()) != '\n');
+		// remove 'enter' from buffer
+		for(int u = 0; u < strlen(buff)-1; u++ ){
+			clientBuffer[u] = buff[u];
+		}
+		//send message to server
+		SendMessage(sockfd, clientBuffer);
+		bzero(clientBuffer,sizeof(clientBuffer));
+		bzero(buff,sizeof(buff));
+		break;
 	}
-	//send message to server
-	SendMessage(sockfd, clientBuffer);
-	bzero(clientBuffer,sizeof(clientBuffer));
-	bzero(buff,sizeof(buff));
-	printf("test ---- \n");
 }
 
 char client_response[256];
@@ -350,9 +352,8 @@ int main(int argc, char *argv[]) {
 		int n;
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);//, ClientSideMessageStorage, currentMsgID);
-		printf("test ---- after func");
 		n = read(network_socket,buffer,256);
-
+		
 		//printf("%s IS THE BUFFER\n", buffer);
 		if (strncmp("SUB", buffer, 3) ==0){
 			printf("Recognised SUB - Detecting ChannelID\n");
@@ -391,20 +392,20 @@ int main(int argc, char *argv[]) {
 			printf("Client Exit...\n"); 
 			SendMessage(network_socket, "keep_alive");
 			keep_alive = 0;
-			printf("test ---- danger \n");
 		}
-		if (strncmp("NEXR ", buffer, 5) ==0){
+		else if (strncmp("NEXR ", buffer, 5) ==0){
 			NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
 		}
 		else{
 			printf("Invalid Input\n");
 		}
-		
+		printf("%s",buffer);
 		bzero(buffer,256);
+		printf("test");
 	}
 
 	//close connection
-	close(network_socket);
+	// close(network_socket);
 
 	return 0;
 }
