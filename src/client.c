@@ -3,7 +3,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
-
+#include <signal.h>
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
@@ -12,14 +12,15 @@
 #include <netdb.h>
 #include <stdbool.h>
 #include <regex.h>
+#include <pthread.h>
 
 #define DEFAULTPORT 12345
-
-
 #define CLIENTBUFF 256
 #define ERRORNUM 300
+
 int keep_alive;
 
+void* userinputread(void* args);
 
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
@@ -33,7 +34,7 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 void ifstatment(char buffer) {
 
 }
-
+void *my_entry_function(void *param);
 
 int FindNumbers(char message[1024], char buffer[CLIENTBUFF], int msgIDRW[3]);
 
@@ -52,8 +53,6 @@ int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3])
 		}
 	}
 }
-
-
 
 
 int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
@@ -352,7 +351,6 @@ int main(int argc, char *argv[]) {
 	printf("--> %d\n", ClientSideMessageChannelID[0][0]);
 	printf("Sub to %d\n", subChannelID[0]);
 	
-
 
 	while(keep_alive){
 		int n;
