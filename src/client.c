@@ -93,9 +93,7 @@ void NEXT(int msgIDRW[3], char ClientSideMessageStorage[1000][1024], int ClientS
 	} else {
 		printf("Message with ID %d is null\n", msgIDRW[0]);
 		
-		
 	}
-	
 
 } 
 
@@ -290,6 +288,34 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 char client_response[256];
 
 
+int subChannelID[256];
+int totalChannelMessageCount;//need a way to know how many messages have been sent to X channel since server start
+int totalReadMessages;//messages from this channel that have been read
+int totalMessagesInBufferForChannel;//messages that are in buffer for this channel NOT read
+int SubbedChannelCount;//count of currently subscribed channels
+
+
+void CHANNELS(){
+	//arrange channels in ascending order by ID
+	for (int i = 0; i < SubbedChannelCount; i++){
+		for (int u = 0; u < SubbedChannelCount; u++){
+			if(subChannelID[i] > subChannelID[u]){
+				int temp = subChannelID[i];
+				subChannelID[i] = subChannelID[u];
+				subChannelID[u] = temp;
+			}
+		}
+	}
+
+
+	for(int i = 0; i < SubbedChannelCount; i++){
+		printf("%ls	%d	%d	%d", subChannelID, totalChannelMessageCount, totalReadMessages, totalMessagesInBufferForChannel);
+	}
+
+	
+}
+
+
 int main(int argc, char *argv[]) {
 	//create socket
 	int network_socket;
@@ -311,19 +337,11 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	//Send testing message
-	//SendMessage(network_socket, "next CHANNELID");
-	
-	
-
 	//recieve data from server
 	char server_response[256];
 	recv(network_socket, &server_response, sizeof(server_response),0);
 	int LoopLimit = 3;
 	// for (int i = 0; i < LoopLimit; i++){
-	// 	ClientSideSampleArray[i] = server_response;
-	// 	printf("Please work, you bastard ---> %s\n", ClientSideSampleArray[i]);
-	// }
 
 
 	//print the server response
