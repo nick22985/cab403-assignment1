@@ -20,17 +20,6 @@
 #define ERRORNUM 300
 
 
-// char ParseMessage (char WhatWasEntered){
-
-// 	char OriginalInput = WhatWasEntered;
-// 	char SplitCharacter = " ";
-	
-// 	char WhatMethod = strtok(WhatWasEntered, SplitCharacter);
-
-// 	printf(WhatMethod);
-
-
-// }
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
 	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
@@ -44,14 +33,7 @@ void ifstatment(char buffer) {
 
 }
 
-// int StringSplit(char InputText){
-// 	char token = strtok(InputText, " ");
 
-// 	while (token != NULL){
-// 		printf("%s\n", token);
-// 		token = strtok(NULL, " ");
-// 	}
-// }
 int FindNumbers(char message[1024], char buffer[CLIENTBUFF], int msgIDRW[3]);
 
 int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
@@ -335,14 +317,12 @@ int main(int argc, char *argv[]) {
 	//recieve data from server
 	char server_response[256];
 	recv(network_socket, &server_response, sizeof(server_response),0);
-	int LoopLimit = 3;
 	// for (int i = 0; i < LoopLimit; i++){
 
 	//print the server response
 	printf("The server said %s\n", server_response);
 	char buffer[256];
 	int subChannelID[256];
-	int n, temp;
 
 	//int currentMsgIDRead, currentMsgIDWrite;
 	int msgIDRW[3]; // Contains info for Read and Write pointer
@@ -350,7 +330,6 @@ int main(int argc, char *argv[]) {
 	int ClientSideMessageChannelID[1000][1], ClientSideMessageRead[1000][1];
 
 	int Counter = 0;
-
 	// subChannelID[0] = 1;
 	strcpy(ClientSideMessageStorage[0], "Message 1");
 	ClientSideMessageChannelID[0][0] = 1;
@@ -366,9 +345,7 @@ int main(int argc, char *argv[]) {
 	printf("--> %d\n", ClientSideMessageChannelID[0][0]);
 	printf("Sub to %d\n", subChannelID[0]);
 	
-
-	regex_t regex;
-	int reti;
+int n;
 
 	keep_alive = 1;
 	while(keep_alive){
