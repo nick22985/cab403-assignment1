@@ -94,11 +94,12 @@ int main(int argc, char *argv[]){
         addr_size = sizeof serverStorage;
         client_socket = accept(server_socket, (struct sockaddr *) &serverStorage, &addr_size);
         keep_alive = 1;
-        while(keep_alive){
+
             //listen for connections
             //send message
             send(client_socket, server_message, sizeof(server_message),0);
             bzero(buffer,256);  
+        while(keep_alive){
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
