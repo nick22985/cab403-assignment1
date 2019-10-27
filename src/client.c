@@ -98,7 +98,7 @@ void NEXT(int msgIDRW[3], char ClientSideMessageStorage[1000][1024], int ClientS
 
 } 
 
-void NEXTID(int msgIDRW[3], char buffer[CLIENTBUFF], char ClientSideMessageStorage[1000][1024], int ClientSideMessageChannelID[1000][1], int  ClientSideMessageRead[1000][1], int subChannelID[CLIENTBUFF])
+int NEXTID(int msgIDRW[3], char buffer[CLIENTBUFF], char ClientSideMessageStorage[1000][1024], int ClientSideMessageChannelID[1000][1], int  ClientSideMessageRead[1000][1], int subChannelID[CLIENTBUFF])
 {
 	msgIDRW[2] = 4;
 	char message[1024];
@@ -107,19 +107,25 @@ void NEXTID(int msgIDRW[3], char buffer[CLIENTBUFF], char ClientSideMessageStora
 	printf("channelID is: %d\n", channelID);
 
 	for(int i=0;i<CLIENTBUFF; i++){
+		// if channel ID input is a sub channel
 		if(subChannelID[i] == channelID){
-			if (ClientSideMessageChannelID[i][0] == channelID){
-				if (ClientSideMessageStorage[i][0] != 0 && ClientSideMessageRead[i][0] != 1){
-					printf("Next unread message from channel %d: %s\n", channelID, ClientSideMessageStorage[i]);
-					ClientSideMessageRead[i][0] = 1;
-					printf("Test4");
+			for (int j=0;j<1000;j++){
+				// if channel ID input is message Channel ID 
+				if (ClientSideMessageChannelID[j][0] == channelID){
+					// if user hasnt read then print message
+					if (ClientSideMessageRead[j][0] != 1){
+						printf("Next unread message from channel %d: %s\n", channelID, ClientSideMessageStorage[j]);
+						ClientSideMessageRead[j][0] = 1;
+						return 1;
+						//printf("Test4");
 
-				} 
-				printf("Test3");
+					} 
+					//printf("Test3");
+				}
+				//printf("Test2");
 			}
-			printf("Test2");
 		}
-		printf("Test1");
+		//printf("Test1");
 	}
 
 
@@ -364,6 +370,10 @@ int main(int argc, char *argv[]) {
 	ClientSideMessageChannelID[1][0] = 1;
 	strcpy(ClientSideMessageStorage[2], "Message 3");
 	ClientSideMessageChannelID[2][0] = 1;
+	strcpy(ClientSideMessageStorage[3], "Message 4");
+	ClientSideMessageChannelID[3][0] = 2;
+	strcpy(ClientSideMessageStorage[4], "Message 5");
+	ClientSideMessageChannelID[4][0] = 1;
 	printf("-> %s\n", ClientSideMessageStorage[0]);
 	printf("--> %d\n", ClientSideMessageChannelID[0][0]);
 	printf("Sub to %d\n", subChannelID[0]);
