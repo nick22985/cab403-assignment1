@@ -37,11 +37,11 @@ void *my_entry_function(void *param);
 
 int FindNumbers(char message[1024], char buffer[CLIENTBUFF], int msgIDRW[3]);
 
-int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
-	SubbedChannelCount = SubbedChannelCount -1;
+int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int newSubChannelID[CLIENTBUFF], int msgIDRW[3]){
 	int temp;
 	char message[1024];
 	msgIDRW[2] = 5;
+	
 	
 	temp = FindNumbers(message, buffer, msgIDRW);
 	printf("UNSUB from -->%d\n", temp); 
@@ -51,13 +51,27 @@ int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3])
 		for (int i=0;i<CLIENTBUFF; i++){
 			// if SUB of channelID found, remove it
 			if (subChannelID[i] == temp){
-				for(int j=i; CLIENTBUFF - i; j++){
+				for(int j=i; j < CLIENTBUFF - i; j++){
 					if(subChannelID[j+1] != NULL){
-						subChannelID[j] = subChannelID[j+1];
+						int y;
+						for(y=0-1;y<CLIENTBUFF- (CLIENTBUFF - j) -1; y++){
+							newSubChannelID[y] = subChannelID[y];
+						}
+						for(int t=y-1;t<(CLIENTBUFF- y)-1 ; t++){
+							newSubChannelID[t] = subChannelID[t+1];
+						}
+						// subChannelID[j] = subChannelID[j+1];
+						printf("%d is: %d\n", subChannelID[j], j);
+						printf("%d is: %d\n", subChannelID[0], 0);
+						bzero(subChannelID, 256);
+						newSubChannelID = subChannelID;
 					}
-					else if (subChannelID[j+1] == NULL){
+					else if (subChannelID[j+1] == NULL || subChannelID[j] == NULL){
 						subChannelID[j+1] = NULL;
-						return 1;
+						for (int r=0;r<CLIENTBUFF;r++){
+							printf("%d is: %d\n", subChannelID[r], r);
+						}
+						return 0;
 					}
 				}
 				printf("Unsubscribed from channel %d\n", temp);
@@ -69,7 +83,6 @@ int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3])
 		}
 	}
 }
-
 
 int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 	SubbedChannelCount = SubbedChannelCount + 1;
@@ -270,7 +283,7 @@ int totalChannelMessageCount = 0;//need a way to know how many messages have bee
 int totalReadMessages;//messages from this channel that have been read
 int totalMessagesInBufferForChannel;//messages that are in buffer for this channel NOT read
 
-int subChannelID[256];
+int subChannelID[256], newSubChannelID[CLIENTBUFF];
 
 void CHANNELS(){
 	//arrange channels in ascending order by ID
@@ -351,7 +364,7 @@ int main(int argc, char *argv[]) {
 			if (strlen(buffer) > 6){
 
 				printf("Recognised UNSUB\n");
-				UNSUB(buffer,subChannelID, msgIDRW);
+				UNSUB(buffer,subChannelID, newSubChannelID, msgIDRW);
 			} else {
 				printf("Invalid channel");
 			}

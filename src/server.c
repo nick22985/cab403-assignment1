@@ -8,7 +8,6 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netdb.h>
-#include "../include/server.h"
 #include <signal.h>         /*SIGINT*/
 #include <stdbool.h>
 #include <termios.h> 		// Stop Terminal Echo
