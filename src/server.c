@@ -28,10 +28,9 @@ void error(const char *msg){
 }
 
 void SendMessage(int DestinationSocket ,char *EnteredText){
-	//send(DestinationSocket, EnteredText, sizeof(EnteredText),0);
+
 	send(DestinationSocket, EnteredText, strlen(EnteredText), 0);
-	//printf("sent !\n");
-	//printf("TestServer: %ld\n",strlen(EnteredText));
+
 }
 
 int SelectPort(int EnteredPort) {
@@ -45,26 +44,18 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-
-
 int keep_alive;
 
 int main(int argc, char *argv[]){
     int fd;
-    typedef struct thevaultpacket {
-        int messageID;
-        int channelID;
-        int time;
-        char message;
-        }thevaultpacket_t;
 
-    char server_message[256] = "You have reached the server. Yes cunt.\n";
+
+    char server_message[256] = "Welcome! Your client ID is 1\n";
 
     //start clock
     time_t Server_Starttime = time(NULL);
     struct timeval start, end;
     gettimeofday(&start, NULL);
-
 
 	//Int to refer to Buffer by
 	int n;
@@ -104,36 +95,10 @@ int main(int argc, char *argv[]){
             if (strlen(buffer) != 0) {
                 printf("Client: %s\n",buffer);
 
-                if ( strcmp("next CHANNELID", buffer) == 0) {
-                    printf("NEXT CHANNELID Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("sub CHANNELID", buffer) == 0) {
-                    printf("SUB function Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("unsub CHANNELID", buffer) == 0) {
-                    printf("UNSUB function Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("livefeed CHANNELID", buffer) == 0) {
-                    printf("LIVEFEED CHANNELID Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("livefeed", buffer) == 0) {
-                    printf("LIVEFEED Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if ( strcmp("SEND CHANNELID MESSAGE", buffer) == 0) {
-                    printf("SEND Here\n");
-                    //Function for server to run when next is run.
-                }
-                else if (strcmp("keep_alive", buffer) == 0) {
+                if (strcmp("keep_alive", buffer) == 0) {
                     keep_alive = 0;
                 }
                     else {
-                        printf("NOT RECOGNISED COMMAND\n");
-                        //printf("length of buffer is: %ld\n", strlen(buffer)); 
                         //Prints time of message sending
                         gettimeofday(&end, NULL);
                         long seconds = (end.tv_sec - start.tv_sec);
@@ -145,11 +110,6 @@ int main(int argc, char *argv[]){
                 }
             }
         }
-	}
-
-    if (shm_unlink(SHARED_OBJECT_PATH) != 0) {
-		perror("In shm_unlink()");
-		exit(1);
 	}
 
 	//close socket
