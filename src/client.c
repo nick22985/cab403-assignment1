@@ -409,11 +409,21 @@ int main(int argc, char *argv[]) {
 		}
 
 		// If user input is NEXT 
-		if (strncmp("NEXT", buffer, 4) ==0){
+		else if (strncmp("NEXT", buffer, 4) ==0){
 			//printf("CurrentMsgIDWrite: %d\n", msgIDRW[0]);// currentMsgIDRead);
-			NEXT(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead);
-			
-		} else if(strncmp("SEND", buffer, 4) ==0){
+			if(strlen(buffer) == 4){
+				printf("String length of Buffer is 4 - No ChannelID");
+				NEXT(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead);
+			}
+			else if(strlen(buffer) == 6 || strlen(buffer) == 7 || strlen(buffer) == 8){
+				printf("String length of Buffer is %ld - there is ChannelID", strlen(buffer));
+				NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
+			}
+			else{
+				printf("Invalid input");
+			}	
+		} 
+		else if(strncmp("SEND", buffer, 4) ==0){
 			printf("CurrentMsgIDWrite: %d\n", msgIDRW[1]);// currentMsgIDWrite);
 			SEND(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, buffer);
 			printf("New Message Added: %s\n", ClientSideMessageStorage[msgIDRW[1]]);
@@ -421,9 +431,9 @@ int main(int argc, char *argv[]) {
 			printf("COunter -->> %d\n", Counter);
 			// strcpy(ClientSideMessageStorage[Counter], buffer);
 		} 
-		if (strncmp("NEXR ", buffer, 5) ==0){
-			NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
-		}
+		// if (strncmp("NEXR ", buffer, 5) ==0){
+		// 	NEXTID(msgIDRW, buffer, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead, subChannelID);
+		// }
 		else{
 			printf("Invalid Input");
 		}
