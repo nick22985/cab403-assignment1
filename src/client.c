@@ -39,6 +39,7 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 	//printf("TestClient: %ld\n",strlen(EnteredText));
 }
 
+
 void ifstatment(char buffer) {
 
 }
@@ -315,6 +316,7 @@ void CHANNELS(){
 	
 }
 
+int keep_alive;
 
 int main(int argc, char *argv[]) {
 	//create socket
@@ -336,20 +338,17 @@ int main(int argc, char *argv[]) {
 		exit(0);
 	}
 
-
 	//recieve data from server
 	char server_response[256];
 	recv(network_socket, &server_response, sizeof(server_response),0);
 	int LoopLimit = 3;
 	// for (int i = 0; i < LoopLimit; i++){
 
-
 	//print the server response
 	printf("The server said %s\n", server_response);
 	char buffer[256];
 	int subChannelID[256];
 	int n, temp;
-
 
 	//int currentMsgIDRead, currentMsgIDWrite;
 	int msgIDRW[3]; // Contains info for Read and Write pointer
@@ -373,8 +372,8 @@ int main(int argc, char *argv[]) {
 	regex_t regex;
 	int reti;
 
-
-	while(1){
+	keep_alive = 1;
+	while(keep_alive){
 		//CODE WHILE CONNECTED GOeS HERE
 		func(network_socket);//, ClientSideMessageStorage, currentMsgID);
 		n = read(network_socket,buffer,256);
@@ -395,11 +394,11 @@ int main(int argc, char *argv[]) {
 		else if (strncmp("BYE", buffer, 3) ==0){
 			printf("Recognised BYE\n");
 			printf("Client Exit...\n"); 
-			exit(0); 
+			SendMessage(network_socket, "keep_alive");
+			keep_alive = 0;
 		}
-
 		// If user input is NEXT 
-		if (strncmp("NEXT", buffer, 4) ==0){
+		else if (strncmp("NEXT", buffer, 4) ==0){
 			//printf("CurrentMsgIDWrite: %d\n", msgIDRW[0]);// currentMsgIDRead);
 			NEXT(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead);
 			

@@ -63,6 +63,8 @@ int SelectPort(int EnteredPort) {
 
 // }
 
+int keep_alive;
+
 int main(int argc, char *argv[]){
     int fd;
     typedef struct thevaultpacket {
@@ -128,7 +130,7 @@ int main(int argc, char *argv[]){
 
     //bind the socket to specified IP and port
     bind (server_socket, (struct sockaddr*) &server_address, sizeof(server_address));
-
+    keep_alive = 1;
 	while(1){
 		//listen for connections
 		listen(server_socket, 10);
@@ -138,7 +140,7 @@ int main(int argc, char *argv[]){
 
         //send message
         send(client_socket, server_message, sizeof(server_message),0);
-        while(1){
+        while(keep_alive){
             bzero(buffer,256);  
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
@@ -174,16 +176,10 @@ int main(int argc, char *argv[]){
                     printf("SEND Here\n");
                     //Function for server to run when next is run.
                 }
-                // else if ( strcmp("CHANNELS", buffer) == 0){
-                //     printf("CHANNELS .........");
-                //     //Function for server to when next is run
-
-                // }
-                //     else if ( strncmp("BYE", buffer, 3) == 0) {
-                //     printf("BYE Here\n");
-                //     //Function for server to run when next is run.
-
-                // }
+                else if (strcmp("keep_alive", buffer) == 0) {
+                    printf("exit server\n");
+                    keep_alive = 0;
+                }
                     else {
                         printf("NOT RECOGNISED COMMAND\n");
                         //printf("length of buffer is: %ld\n", strlen(buffer)); 
