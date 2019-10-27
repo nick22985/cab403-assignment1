@@ -3,7 +3,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
-
+#include <signal.h>
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
@@ -12,14 +12,15 @@
 #include <netdb.h>
 #include <stdbool.h>
 #include <regex.h>
+#include <pthread.h>
 
 #define DEFAULTPORT 12345
-
-
 #define CLIENTBUFF 256
 #define ERRORNUM 300
+
 int keep_alive;
-int SubbedChannelCount;//count of currently subscribed channels
+
+void* userinputread(void* args);
 
 //Has the Server print the EnteredText 
 void SendMessage(int DestinationSocket ,char *EnteredText){
@@ -33,7 +34,7 @@ void SendMessage(int DestinationSocket ,char *EnteredText){
 void ifstatment(char buffer) {
 
 }
-
+void *my_entry_function(void *param);
 
 int FindNumbers(char message[1024], char buffer[CLIENTBUFF], int msgIDRW[3]);
 
@@ -51,14 +52,24 @@ int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3])
 		for (int i=0;i<CLIENTBUFF; i++){
 			// if SUB of channelID found, remove it
 			if (subChannelID[i] == temp){
-				
-
+				for(int j=i; CLIENTBUFF - i; j++){
+					if(subChannelID[j+1] != NULL){
+						subChannelID[j] = subChannelID[j+1];
+					}
+					else if (subChannelID[j+1] == NULL){
+						subChannelID[j+1] = NULL;
+						return 1;
+					}
+				}
+				printf("Unsubscribed from channel %d\n", temp);
+				return 1;
+			}
+			else if (subChannelID[i] != temp && i == 255){
+				printf("Not Subscribed to channel %d\n", temp);
 			}
 		}
 	}
 }
-
-
 
 
 int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
@@ -78,7 +89,8 @@ int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 
 						if (subChannelID[j] == NULL){
 							subChannelID[j] = temp;
-							printf("Subscribed to channel %d\n", subChannelID[j]);
+							printf("Subscribed to channel %d, pointer %d\n", subChannelID[j], j);
+
 							return 1;
 						} 
 					}
@@ -148,7 +160,7 @@ int NEXTID(int msgIDRW[3], char buffer[CLIENTBUFF], char ClientSideMessageStorag
 					//printf("Test2");
 				}
 			}
-			else {
+			else if (subChannelID[255] != channelID && i == 255){
 				printf("Not subscribed to channel %d\n", channelID);
 				return 0;
 			}
@@ -246,7 +258,7 @@ void SEND(int msgIDRW[3], char ClientSideMessageStorage[1000][1024], int ClientS
 	
 	
 	
-	printf("User Comment is: %s\n", ClientSideMessageStorage[msgIDRW[1]]);
+	//printf("User Comment is: %s\n", ClientSideMessageStorage[msgIDRW[1]]);
 	msgIDRW[1] = msgIDRW[1]+1;
 	
 }
@@ -370,7 +382,6 @@ int main(int argc, char *argv[]) {
 	printf("Sub to %d\n", subChannelID[0]);
 	
 
-
 	while(keep_alive){
 		int n;
 		//CODE WHILE CONNECTED GOeS HERE
@@ -414,13 +425,16 @@ int main(int argc, char *argv[]) {
 				NEXT(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, ClientSideMessageRead);
 			}
 		} else if(strncmp("SEND", buffer, 4) ==0){
-			totalChannelMessageCount = totalChannelMessageCount+1;
-			printf("CurrentMsgIDWrite: %d\n", msgIDRW[1]);// currentMsgIDWrite);
-			SEND(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, buffer);
-			printf("New Message Added: %s\n", ClientSideMessageStorage[msgIDRW[1]]);
-			Counter = Counter+1;
-			printf("COunter -->> %d\n", Counter);
-			// strcpy(ClientSideMessageStorage[Counter], buffer);
+			if (strlen(buffer) > 5){
+				//printf("CurrentMsgIDWrite: %d\n", msgIDRW[1]);// currentMsgIDWrite);
+				SEND(msgIDRW, ClientSideMessageStorage, ClientSideMessageChannelID, buffer);
+				//printf("New Message Added: %s\n", ClientSideMessageStorage[msgIDRW[1]]);
+				Counter = Counter+1;
+				//printf("COunter -->> %d\n", Counter);
+				// strcpy(ClientSideMessageStorage[Counter], buffer);
+			} else {
+				printf("Invalid channel");
+			}
 		} 
 		
 		else if(strncmp(buffer, "BYE", 3) == 0){
