@@ -45,23 +45,7 @@ int SelectPort(int EnteredPort) {
 	return PortUsed;
 }
 
-// char ParseMessage (char *WhatWasEntered){
 
-// 	char OriginalInput = WhatWasEntered;
-// 	char * OutPutString;
-
-//     printf("PARSING STRING --> %s\n",WhatWasEntered);
-
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("METHOD TO CALL --> %s\n", OutPutString);
-
-//     OutPutString = strtok(OutPutString, " ");
-// 	printf("CHANNEL ID --> %s\n", OutPutString);
-
-//     OutPutString = strtok(WhatWasEntered, " ");
-// 	printf("MESSAGE FOR SEND COMMAND --> %s\n", OutPutString);
-
-// }
 
 int keep_alive;
 
@@ -81,31 +65,6 @@ int main(int argc, char *argv[]){
     struct timeval start, end;
     gettimeofday(&start, NULL);
 
-    //MEMORY
-
-    // if (shm_unlink(SHARED_OBJECT_PATH) != 0) {
-	// 	perror("In shm_unlink()");
-	// 	exit(1);
-	// }
-	// int shared_seg_size = (sizeof(thevaultpacket_t));   /* We want a shared segment capable of storing one message */
-	// thevaultpacket_t* shared_msg;      /* the shared segment, and head of the messages list */
-
-	// fd = shm_open(SHARED_OBJECT_PATH, O_CREAT | O_EXCL | O_RDWR, S_IRWXU | S_IRWXG);
-    
-	// if (fd < 0) {
-	// 	perror("In shm_open()");
-	// 	exit(1);
-	// }
-	// fprintf(stderr, "Created shared memory object %p\n", SHARED_OBJECT_PATH);
-
-    // ftruncate(fd, shared_seg_size);
-    // //messageBank *messageBankPtr = mmap(NULL, sizeof(messageBank), PROT_WRITE | PROT_READ, MAP_SHARED| MAP_ANONYMOUS, -1, 0);
-    // shared_msg = (thevaultpacket_t*)mmap(NULL, shared_seg_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-	// if (shared_msg == NULL) {
-	// 	perror("In mmap()");
-	// 	exit(1);
-	// }
-    // char * SampleArray[10];
 
 	//Int to refer to Buffer by
 	int n;
@@ -113,7 +72,6 @@ int main(int argc, char *argv[]){
     if(argc == 2){
     ChosenPort = atoi(argv[1]);
     }
-
 
     struct sockaddr_storage serverStorage;
     socklen_t addr_size;
@@ -182,7 +140,6 @@ int main(int argc, char *argv[]){
                 else {
                     printf("NOT RECOGNISED COMMAND\n");
                     //printf("length of buffer is: %ld\n", strlen(buffer)); 
-                    
                     //Prints time of message sending
                     gettimeofday(&end, NULL);
                     long seconds = (end.tv_sec - start.tv_sec);
