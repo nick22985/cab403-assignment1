@@ -54,35 +54,57 @@ void ifstatment(char buffer) {
 // }
 int FindNumbers(char message[1024], char buffer[CLIENTBUFF], int msgIDRW[3]);
 
+int UNSUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
+	int temp;
+	char message[1024];
+	msgIDRW[2] = 5;
+	
+	temp = FindNumbers(message, buffer, msgIDRW);
+	printf("UNSUB from -->%d\n", temp); 
+	if (temp <= 255 && temp >= 0){
+	for (int i=0;i<CLIENTBUFF; i++){
+		if (subChannelID[i] != temp){
+			//printf("Subscribed to channel !!TEST-->> %d\n", temp);
+
+		}
+	}
+
+}
+
+
+
+
 int SUB(char buffer[CLIENTBUFF], int subChannelID[CLIENTBUFF], int msgIDRW[3]){
 	int temp;
 	char message[1024];
 	msgIDRW[2] = 3;
 	
 	temp = FindNumbers(message, buffer, msgIDRW);
-	for (int i=0;i<CLIENTBUFF; i++){
-		if (subChannelID[i] != temp){
-			//printf("Subscribed to channel !!TEST-->> %d\n", temp);
-			if (temp <= 255 && temp >= 0){
-				for(int j = 0; j < CLIENTBUFF; j++){
-					//printf("Channel %d at position %d\n", subChannelID[j], j);
+	if (temp <= 255 && temp >= 0){
+		for (int i=0;i<CLIENTBUFF; i++){
+			if (subChannelID[i] != temp){
+				//printf("Subscribed to channel !!TEST-->> %d\n", temp);
+				
+					for(int j = 0; j < CLIENTBUFF; j++){
+						//printf("Channel %d at position %d\n", subChannelID[j], j);
 
-					if (subChannelID[j] == NULL){
-						subChannelID[j] = temp;
-						printf("Subscribed to channel %d\n", subChannelID[j]);
-						return 1;
-					} 
-				}
-				//printf("Suscribed to channel %d\n", temp);
-			} else if (temp < 0 || temp > 255){
-				printf("Invalid channel: %d\n", temp);
+						if (subChannelID[j] == NULL){
+							subChannelID[j] = temp;
+							printf("Subscribed to channel %d\n", subChannelID[j]);
+							return 1;
+						} 
+					}
+					//printf("Suscribed to channel %d\n", temp);
+				
+			}
+			else {
+				printf("Already subscribed to channel %d\n", temp);
 				return 0;
 			}
 		}
-		else {
-			printf("Already subscribed to channel %d\n", temp);
-			return 0;
-		}
+	} else if (temp < 0 || temp > 255){
+		//printf("Invalid channel: %d\n", temp);
+		return 0;
 	}
 
 }
@@ -237,7 +259,7 @@ void SEND(int msgIDRW[3], char ClientSideMessageStorage[1000][1024], int ClientS
 	
 }
 
-void CHANNELS();
+//void CHANNELS(int subChannelID[CLIENTBUFF]);
 
 void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentMsgID) 
 { 
@@ -283,32 +305,32 @@ void func(int sockfd)//, char ClientSideMessageStorage[1000][1024], int currentM
 char client_response[256];
 
 
-int subChannelID[256];
+//int subChannelID[256];
 int totalChannelMessageCount;//need a way to know how many messages have been sent to X channel since server start
 int totalReadMessages;//messages from this channel that have been read
 int totalMessagesInBufferForChannel;//messages that are in buffer for this channel NOT read
 int SubbedChannelCount;//count of currently subscribed channels
 
 
-void CHANNELS(){
-	//arrange channels in ascending order by ID
-	for (int i = 0; i < SubbedChannelCount; i++){
-		for (int u = 0; u < SubbedChannelCount; u++){
-			if(subChannelID[i] > subChannelID[u]){
-				int temp = subChannelID[i];
-				subChannelID[i] = subChannelID[u];
-				subChannelID[u] = temp;
-			}
-		}
-	}
+// void CHANNELS(int subChannelID[CLIENTBUFF]){
+// 	//arrange channels in ascending order by ID
+// 	for (int i = 0; i < SubbedChannelCount; i++){
+// 		for (int u = 0; u < SubbedChannelCount; u++){
+// 			if(subChannelID[i] > subChannelID[u]){
+// 				int temp = subChannelID[i];
+// 				subChannelID[i] = subChannelID[u];
+// 				subChannelID[u] = temp;
+// 			}
+// 		}
+// 	}
 
 
-	for(int i = 0; i < SubbedChannelCount; i++){
-		printf("%ls	%d	%d	%d", subChannelID, totalChannelMessageCount, totalReadMessages, totalMessagesInBufferForChannel);
-	}
+// 	for(int i = 0; i < SubbedChannelCount; i++){
+// 		printf("%ls	%d	%d	%d", subChannelID, totalChannelMessageCount, totalReadMessages, totalMessagesInBufferForChannel);
+// 	}
 
 	
-}
+// }
 
 int keep_alive;
 
@@ -382,9 +404,11 @@ int main(int argc, char *argv[]) {
 		}
 		else if (strncmp("CHANNELS", buffer, 8) ==0){
 			printf("Recognised CHANNELS\n");
+			//CHANNELS(subChannelID);
 		}		
 		else if (strncmp("UNSUB", buffer, 5) ==0){
 			printf("Recognised UNSUB - Detecting ChannelID\n");
+			UNSUB(buffer,subChannelID, msgIDRW);
 		}
 		else if (strncmp("LIVEFEED", buffer, 8) ==0){
 			printf("Recognised LIVEFEED - Detecting ChannelID\n");
