@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "E:\\Program Files\\OneDrive - Queensland University of Technology\\QUT-Lesson-Resources\\Year-2\\Year-2-Sem-2\\Cab403\\Tut"
+		},
+		{
+			"path": "E:\\Program Files\\OneDrive - Queensland University of Technology\\QUT-Lesson-Resources\\Year-2\\Year-2-Sem-2\\Cab403\\CAB403 Assignment"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"pthread.h": "c",
+<<<<<<< HEAD
+			"server.h": "c"
+=======
+			"server.h": "c",
+			"errno.h": "c"
+>>>>>>> 9714352f615b24218543c644d00baaa2109599b3
+		}
+	}
+}
