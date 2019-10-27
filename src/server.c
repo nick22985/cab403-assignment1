@@ -95,10 +95,10 @@ int main(int argc, char *argv[]){
         client_socket = accept(server_socket, (struct sockaddr *) &serverStorage, &addr_size);
         keep_alive = 1;
 
-            //listen for connections
-            //send message
-            send(client_socket, server_message, sizeof(server_message),0);
-            bzero(buffer,256);  
+        //listen for connections
+        //send message
+        send(client_socket, server_message, sizeof(server_message),0);
+        bzero(buffer,256);  
         while(keep_alive){
             n = read(client_socket,buffer,256);
             if (strlen(buffer) != 0) {
